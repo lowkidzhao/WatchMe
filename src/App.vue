@@ -24,7 +24,9 @@ onUnmounted(() => {
 
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
-
+      <v-btn>
+        测试
+      </v-btn>
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
