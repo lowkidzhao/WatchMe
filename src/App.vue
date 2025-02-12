@@ -19,13 +19,22 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <WorkSide />
-  <nav>
-    <RouterLink to="/">Home</RouterLink>
-    <RouterLink to="/about">About</RouterLink>
-  </nav>
+  <div>
 
-  <RouterView />
+    <WorkSide />
+    <nav>
+      <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/about">About</RouterLink>
+    </nav>
+
+    <RouterView />
+
+  </div>
 </template>
 
-<style scoped></style>
+<style>
+/* 隐藏滚动条但保留滚动功能 */
+::-webkit-scrollbar {
+  display: none;
+}
+</style>

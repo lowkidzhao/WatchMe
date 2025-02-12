@@ -23,3 +23,11 @@ $ npm run electron:build
 ```bash
 void
 ```
+
+---
+
+## about it
+
+```bash
+vite-plugin-vuetify（加载器减少打包体积）
+```

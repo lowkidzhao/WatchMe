@@ -8,11 +8,14 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "electron:dev": "cross-env NODE_ENV=development concurrently \"npm run dev\" \"wait-on --timeout 10000 http://localhost:5173 && electron --trace-warnings .\"",
+    "electron:dev": "cross-env NODE_ENV=development concurrently \"npm run dev\" \"wait-on --timeout 15000 http://localhost:5173 && electron --trace-warnings .\"",
     "electron:build": "cross-env NODE_ENV=production npm run build && electron-builder"
   },
   "dependencies": {
+    "modern-css-reset": "^1.4.0",
     "pinia": "^2.3.1",
+    "systeminformation": "^5.25.11",
+    "vite-plugin-vuetify": "^2.1.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",
     "vuetify": "^3.7.11"

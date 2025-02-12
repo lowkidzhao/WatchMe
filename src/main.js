@@ -1,16 +1,11 @@
-import "./assets/main.css";
-
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import "modern-css-reset/dist/reset.min.css"; // 引入 Reset.css
 // Vuetify
 import "vuetify/styles";
 import { createVuetify } from "vuetify";
-import * as components from "vuetify/components";
-import * as directives from "vuetify/directives";
 import "@mdi/font/css/materialdesignicons.css";
 const vuetify = createVuetify({
-	components,
-	directives,
 	icons: {
 		defaultSet: "mdi", // This is already the default value - only for display purposes
 	},
