@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useControllersStore } from '@/stores/controllers';
+import { RouterLink, RouterView } from 'vue-router'
 
 const store = useControllersStore();
 

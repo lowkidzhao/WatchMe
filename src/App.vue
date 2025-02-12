@@ -1,5 +1,4 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
 import { onMounted, onUnmounted } from 'vue';
 import WorkSide from "./components/workside.vue";
 import sidebars from './components/sidebars.vue';
@@ -29,12 +28,6 @@ onUnmounted(() => {
     <div class="sidebars">
       <sidebars />
     </div>
-
-    <!-- <nav>
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/about">About</RouterLink>
-    </nav> -->
-
 
   </v-app>
 </template>

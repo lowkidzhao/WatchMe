@@ -1,8 +1,8 @@
 <script setup>
-import { useCounterStore } from "@/stores/counter";
 import { ref } from 'vue';
+import { onMounted } from 'vue';
 
-const store = useCounterStore();
+
 const response = ref(false);
 
 async function callMainProcessMethod() {
@@ -13,13 +13,14 @@ async function callMainProcessMethod() {
     console.error('Error calling main process method:', error);
   }
 }
-callMainProcessMethod();
+console.log("挂载成功");
+
 </script>
 
 <template>
   <main>
-    <v-btn @Click="store.increment">
-      {{ store.count }}
+    <v-btn @Click="callMainProcessMethod()">
+      获取
     </v-btn>
     <v-progress-circular v-if="response == false" color="primary" indeterminate></v-progress-circular>
     <span>
