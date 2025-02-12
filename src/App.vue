@@ -2,6 +2,8 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { onMounted, onUnmounted } from 'vue';
 import WorkSide from "./components/workside.vue";
+import sidebars from './components/sidebars.vue';
+
 
 // 监听关闭信号
 onMounted(() => {
@@ -19,22 +21,33 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div>
+  <v-app>
+    <div class="workside">
+      <WorkSide />
+    </div>
+    <!-- sidebars里显示页面内容，自适应大小 -->
+    <div class="sidebars">
+      <sidebars />
+    </div>
 
-    <WorkSide />
-    <nav>
+    <!-- <nav>
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/about">About</RouterLink>
-    </nav>
+    </nav> -->
 
-    <RouterView />
 
-  </div>
+  </v-app>
 </template>
 
 <style>
 /* 隐藏滚动条但保留滚动功能 */
 ::-webkit-scrollbar {
   display: none;
+}
+
+.workside {
+  position: absolute;
+  bottom: 3%;
+  right: 3%;
 }
 </style>

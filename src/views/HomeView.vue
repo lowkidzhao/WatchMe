@@ -3,7 +3,7 @@ import { useCounterStore } from "@/stores/counter";
 import { ref } from 'vue';
 
 const store = useCounterStore();
-const response = ref('');
+const response = ref(false);
 
 async function callMainProcessMethod() {
   try {
@@ -21,6 +21,7 @@ callMainProcessMethod();
     <v-btn @Click="store.increment">
       {{ store.count }}
     </v-btn>
+    <v-progress-circular v-if="response == false" color="primary" indeterminate></v-progress-circular>
     <span>
       {{ response.system }}
     </span>

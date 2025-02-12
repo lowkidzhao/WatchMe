@@ -1,0 +1,60 @@
+<script setup>
+import { ref } from 'vue';
+import { useControllersStore } from '@/stores/controllers';
+
+const store = useControllersStore();
+
+const min = () => {
+  window.electronAPI.minimizeWindow();
+};
+
+const close = () => {
+  window.electronAPI.closeWindow();
+}
+
+
+</script>
+<template>
+  <v-card>
+    <v-layout>
+      <v-app-bar color="#B2EBF2" density="compact" class="custom-app-bar">
+        <v-app-bar-nav-icon variant="text" @click.stop="store.changedrawer" class="navicon"></v-app-bar-nav-icon>
+
+        <v-toolbar-title>WATCHME</v-toolbar-title>
+
+        <v-spacer></v-spacer>
+
+        <template v-if="$vuetify.display.mdAndUp">
+          <v-btn icon="mdi-minus-box " variant="text" @click="min()" class="navicon"></v-btn>
+          <v-btn icon="mdi-xamarin" variant="text" @click="close()" class="navicon"></v-btn>
+        </template>
+
+        <!-- <v-btn icon="mdi-dots-vertical" variant="text"></v-btn> -->
+      </v-app-bar>
+      <v-main style="margin-top: 5px;">
+        <RouterView />
+      </v-main>
+    </v-layout>
+  </v-card>
+  <v-navigation-drawer v-model="store.drawerside" temporary class="custom-drawer">
+    <v-list-item title=" 仓库" subtitle="选择"></v-list-item>
+    <v-divider></v-divider>
+    <v-list-item link title="List Item 1"></v-list-item>
+    <v-list-item link title="List Item 2"></v-list-item>
+    <v-list-item link title="List Item 3"></v-list-item>
+  </v-navigation-drawer>
+</template>
+<style scoped>
+.custom-drawer {
+  background-color: #B2EBF2;
+}
+
+.custom-app-bar {
+  -webkit-app-region: drag;
+  /* 添加 -webkit- 前缀以支持 Chromium 内核 */
+}
+
+.navicon {
+  -webkit-app-region: no-drag;
+}
+</style>

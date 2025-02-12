@@ -13,6 +13,10 @@ function createWindow() {
 			nodeIntegration: false,
 			contextIsolation: true,
 		},
+		// 隐藏菜单栏
+		autoHideMenuBar: true,
+		// 隐藏窗口边框
+		frame: false,
 	});
 
 	if (process.env.NODE_ENV === "development") {
@@ -28,6 +32,15 @@ function createWindow() {
 
 app.whenReady().then(() => {
 	createWindow();
+
+	// 监听最小化窗口事件
+	ipcMain.on("minimize-window", () => {
+		mainWindow.minimize();
+	});
+	// 监听关闭窗口事件
+	ipcMain.on("close-window", () => {
+		mainWindow.close();
+	});
 
 	app.on("activate", function () {
 		if (BrowserWindow.getAllWindows().length === 0) createWindow();
