@@ -5,6 +5,7 @@ import { useComputersStore } from '@/stores/mycomputers';
 import { RouterLink, RouterView } from 'vue-router'
 
 const store = useControllersStore();
+const store2 = useComputersStore();
 
 const min = () => {
   window.electronAPI.minimizeWindow();
@@ -33,17 +34,22 @@ const close = () => {
 
         <!-- <v-btn icon="mdi-dots-vertical" variant="text"></v-btn> -->
       </v-app-bar>
-      <v-main style="margin-top: 5px;">
+      <v-main class="mainpage">
         <RouterView />
       </v-main>
     </v-layout>
   </v-card>
   <v-navigation-drawer v-model="store.drawerside" temporary class="custom-drawer">
-    <v-list-item title=" 仓库" subtitle="选择"></v-list-item>
+    <v-list-item title="仓库" style="font-size: 50px;"></v-list-item>
     <v-divider></v-divider>
-    <!-- 使用 v-for 渲染计算机列表 -->
-    <v-list-item v-for="computer in computers" :key="computer.id" :title="computer.name"
-      :subtitle="computer.description"></v-list-item>
+    <!-- 使用 v-if 和 v-else 控制显示内容 -->
+    <template v-if="store2.computers.length > 0">
+      <v-list-item v-for="computer in store2.computers" :key="computer.system.systemInfo.uuid"
+        :title="computer.system.systemInfo.version" :subtitle="computer.system.systemInfo.manufacturer"></v-list-item>
+    </template>
+    <template v-else>
+      <v-list-item title="暂无计算机信息" subtitle="请添加计算机"></v-list-item>
+    </template>
   </v-navigation-drawer>
 </template>
 <style scoped>
@@ -58,5 +64,13 @@ const close = () => {
 
 .navicon {
   -webkit-app-region: no-drag;
+}
+
+.mainpage {
+  display: inline-block;
+  /* 转换为行内块元素 */
+  margin-top: 15px;
+  width: 100%;
+  height: 100%;
 }
 </style>
