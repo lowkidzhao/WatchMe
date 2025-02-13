@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useControllersStore } from '@/stores/controllers';
+import { useComputersStore } from '@/stores/mycomputers';
 import { RouterLink, RouterView } from 'vue-router'
 
 const store = useControllersStore();
@@ -40,9 +41,9 @@ const close = () => {
   <v-navigation-drawer v-model="store.drawerside" temporary class="custom-drawer">
     <v-list-item title=" 仓库" subtitle="选择"></v-list-item>
     <v-divider></v-divider>
-    <v-list-item link title="List Item 1"></v-list-item>
-    <v-list-item link title="List Item 2"></v-list-item>
-    <v-list-item link title="List Item 3"></v-list-item>
+    <!-- 使用 v-for 渲染计算机列表 -->
+    <v-list-item v-for="computer in computers" :key="computer.id" :title="computer.name"
+      :subtitle="computer.description"></v-list-item>
   </v-navigation-drawer>
 </template>
 <style scoped>

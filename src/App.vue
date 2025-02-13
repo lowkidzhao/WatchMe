@@ -2,10 +2,16 @@
 import { onMounted, onUnmounted } from 'vue';
 import WorkSide from "./components/workside.vue";
 import sidebars from './components/sidebars.vue';
-
+import initialize from './utils/initialize.js';
+import snack from './components/snack.vue';
 
 // 监听关闭信号
 onMounted(() => {
+
+  console.log('Vue app is mounted.');
+
+  initialize();
+
   window.electronAPI.onCloseVueApp(() => {
     // 在这里可以添加关闭 Vue 应用的逻辑
     console.log('Closing Vue app...');
@@ -28,7 +34,7 @@ onUnmounted(() => {
     <div class="sidebars">
       <sidebars />
     </div>
-
+    <snack />
   </v-app>
 </template>
 

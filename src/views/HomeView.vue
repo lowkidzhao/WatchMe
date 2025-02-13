@@ -1,30 +1,49 @@
 <script setup>
 import { ref } from 'vue';
-import { onMounted } from 'vue';
+import { useComputersStore } from '@/stores/mycomputers';
+import { useSnackdataStore } from '@/stores/snackdata';
 
+const store = useComputersStore();
+const store2 = useSnackdataStore();
 
 const response = ref(false);
+const showaitem = ref(false);
 
+// 调用electronAPI获取系统信息
 async function callMainProcessMethod() {
   try {
-    const result = await window.electronAPI.callMainMethod('Hello from Vue!');
+    showaitem.value = true;
+    const result = await window.electronAPI.callMainMethod("getSystemInfo");
     response.value = result;
+    store.add(result)
+
+    //反馈
+    showaitem.value = false;
+    store2.snackbar = true;
+    store2.text = '获取成功';
+    store2.color1 = 'success'
   } catch (error) {
+    showaitem.value = false;
     console.error('Error calling main process method:', error);
+    store2.snackbar = true;
+    store2.text = '获取失败';
+    store2.color1 = 'orange-darken-2'
   }
 }
-console.log("挂载成功");
+
 
 </script>
 
 <template>
   <main>
-    <v-btn @Click="callMainProcessMethod()">
+    <v-btn @click="callMainProcessMethod()">
       获取
     </v-btn>
-    <v-progress-circular v-if="response == false" color="primary" indeterminate></v-progress-circular>
+    <br>
+    <br>
+    <v-skeleton-loader v-if="showaitem" color="info" type="paragraph"></v-skeleton-loader>
     <span>
-      {{ response.system }}
+      {{ store.computers }}
     </span>
   </main>
 </template>
