@@ -44,9 +44,24 @@
       "electron/**/*"
     ],
     "win": {
+      "artifactName": "${productName}-${version}-${arch}.${ext}",
       "target": [
-        "nsis"
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
       ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": false,
+      "uninstallDisplayName": "WatchMeUninstall"
     },
     "mac": {
       "target": [
