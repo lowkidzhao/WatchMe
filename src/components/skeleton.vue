@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useControllersStore } from '@/stores/controllers';
 import { useComputersStore } from '@/stores/mycomputers';
 import { RouterLink, RouterView } from 'vue-router'
+import WorkSide from '@/components/workside.vue'
 
 const store = useControllersStore();
 const store2 = useComputersStore();
@@ -18,6 +19,9 @@ const close = () => {
 
 </script>
 <template>
+  <div class="workside">
+    <WorkSide />
+  </div>
   <v-card>
     <v-layout>
       <v-app-bar color="#B2EBF2" density="compact" class="custom-app-bar">
@@ -44,8 +48,10 @@ const close = () => {
     <v-divider></v-divider>
     <!-- 使用 v-if 和 v-else 控制显示内容 -->
     <template v-if="store2.computers.length > 0">
-      <v-list-item v-for="computer in store2.computers" :key="computer.system.systemInfo.uuid"
-        :title="computer.system.systemInfo.version" :subtitle="computer.system.systemInfo.manufacturer"></v-list-item>
+      <v-list-item class="hover-effect" v-for="computer in store2.computers" :key="computer.system.systemInfo.uuid"
+        :title="computer.system.systemInfo.name || computer.system.systemInfo.version"
+        :subtitle="computer.network.ip4[0]">
+      </v-list-item>
     </template>
     <template v-else>
       <v-list-item title="暂无计算机信息" subtitle="请添加计算机"></v-list-item>
@@ -53,6 +59,12 @@ const close = () => {
   </v-navigation-drawer>
 </template>
 <style scoped>
+.workside {
+  position: absolute;
+  bottom: 2%;
+  right: 2%;
+}
+
 .custom-drawer {
   background-color: #B2EBF2;
 }
@@ -72,5 +84,24 @@ const close = () => {
   margin-top: 15px;
   width: 100%;
   height: 100%;
+}
+
+/* 鼠标悬停效果样式 */
+.hover-effect {
+  transition: all 0.3s ease;
+  /* 添加过渡效果 */
+  border-radius: 4px;
+  /* 添加圆角 */
+}
+
+.hover-effect:hover {
+  background-color: #e0f7fa;
+  /* 改变背景颜色 */
+  cursor: pointer;
+  /* 鼠标指针变为手型 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* 添加阴影 */
+  transform: translateY(-2px);
+  /* 向上移动 2px */
 }
 </style>

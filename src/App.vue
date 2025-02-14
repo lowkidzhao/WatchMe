@@ -1,6 +1,5 @@
 <script setup>
 import { onMounted, onUnmounted } from 'vue';
-import WorkSide from "./components/workside.vue";
 import skeleton from './components/skeleton.vue';
 import initialize from './utils/initialize.js';
 import snack from './components/snack.vue';
@@ -27,9 +26,6 @@ onUnmounted(() => {
 
 <template>
   <v-app>
-    <div class="workside">
-      <WorkSide />
-    </div>
     <!-- sidebars里显示页面内容，自适应大小 -->
     <div class="skeleton">
       <skeleton />

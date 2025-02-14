@@ -1,9 +1,11 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 
-export const useComputersStore = defineStore("computers", () => {
+export const useComputersStore = defineStore("computer", () => {
 	const computers = ref([]);
-
+	const computerNow = ref({});
+	const showWaiting = ref(false);
+	//添加电脑信息
 	function add(newComputer) {
 		// 查找是否存在相同 uuid 的电脑信息
 		const index = computers.value.findIndex(
@@ -21,5 +23,17 @@ export const useComputersStore = defineStore("computers", () => {
 		localStorage.setItem("computers", JSON.stringify(computers.value));
 	}
 
-	return { computers, add };
+	//定位目前选择的电脑信息
+	function getCurrentComputer(uuid) {
+		const index = computers.value.findIndex(
+			(computer) => computer.system.systemInfo.uuid === uuid
+		);
+		if (index !== -1) {
+			computerNow.value = computers.value[index];
+		} else {
+			computerNow.value = {};
+		}
+	}
+
+	return { computers, add, computerNow, getCurrentComputer, showWaiting };
 });
