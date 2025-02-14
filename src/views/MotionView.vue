@@ -1,8 +1,6 @@
 <script setup>
 
-
 </script>
-
 <template>
-  主页
+  图形化页面
 </template>

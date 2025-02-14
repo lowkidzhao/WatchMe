@@ -45,4 +45,16 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
 }
+
+/* 修改routerlink带来的样式问题 */
+.router-link-active {
+  /* 改变背景颜色 */
+  color: #0063f7;
+  /* 改变文字颜色 */
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
 </style>

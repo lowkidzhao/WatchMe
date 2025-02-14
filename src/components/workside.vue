@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useComputersStore } from '@/stores/mycomputers';
 import { useControllersStore } from '@/stores/controllers';
 import { useSnackdataStore } from '@/stores/snackdata';
+import { RouterLink } from 'vue-router';
 
 const store = useControllersStore();
 const store2 = useComputersStore();
@@ -36,11 +37,15 @@ async function callMainProcessMethod() {
       <v-fab v-bind="activatorProps" size="large" icon="mdi-bank-outline"></v-fab>
     </template>
     <!-- 显示监控端信息 -->
-    <v-btn key="1" icon="$info" @click="store.changedrawer"></v-btn>
+    <RouterLink key="1" :to="`/info/${store2.computerNow.system.systemInfo.uuid}`">
+      <v-btn icon="$info"></v-btn>
+    </RouterLink>
     <!-- 开启监听（会消耗一部分被监听端的性能） -->
     <v-btn key="2" icon="mdi-motion-play"></v-btn>
     <!-- 图形化显示 -->
-    <v-btn key="3" icon="mdi-chart-bar"></v-btn>
+    <RouterLink key="3" to="/motion">
+      <v-btn icon="mdi-chart-bar"></v-btn>
+    </RouterLink>
     <!-- 重新加载 -->
     <v-btn key="4" icon="mdi-reload" @click="callMainProcessMethod()"></v-btn>
   </v-speed-dial>

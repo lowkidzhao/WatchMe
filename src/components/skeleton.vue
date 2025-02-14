@@ -23,7 +23,7 @@ const close = () => {
     <WorkSide />
   </div>
   <v-card>
-    <v-layout>
+    <v-layout class="layout">
       <v-app-bar color="#B2EBF2" density="compact" class="custom-app-bar">
         <v-app-bar-nav-icon variant="text" @click.stop="store.changedrawer" class="navicon"></v-app-bar-nav-icon>
 
@@ -48,10 +48,11 @@ const close = () => {
     <v-divider></v-divider>
     <!-- 使用 v-if 和 v-else 控制显示内容 -->
     <template v-if="store2.computers.length > 0">
-      <v-list-item class="hover-effect" v-for="computer in store2.computers" :key="computer.system.systemInfo.uuid"
-        :title="computer.system.systemInfo.name || computer.system.systemInfo.version"
-        :subtitle="computer.network.ip4[0]">
-      </v-list-item>
+      <RouterLink v-for="computer in store2.computers" :key="computer.system.systemInfo.uuid"
+        :to="`/info/${computer.system.systemInfo.uuid}`">
+        <v-list-item class="hover-effect" :title="computer.system.systemInfo.name || computer.system.systemInfo.version"
+          :subtitle="computer.network.ip4[0]"></v-list-item>
+      </RouterLink>
     </template>
     <template v-else>
       <v-list-item title="暂无计算机信息" subtitle="请添加计算机"></v-list-item>
@@ -82,8 +83,10 @@ const close = () => {
   display: inline-block;
   /* 转换为行内块元素 */
   margin-top: 15px;
+  margin-bottom: 15px;
   width: 100%;
   height: 100%;
+
 }
 
 /* 鼠标悬停效果样式 */
@@ -104,4 +107,7 @@ const close = () => {
   transform: translateY(-2px);
   /* 向上移动 2px */
 }
+
+/* 新增针对 v-layout 的样式 */
+.layout {}
 </style>
