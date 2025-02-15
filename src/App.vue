@@ -36,9 +36,10 @@ onUnmounted(() => {
 
 <style>
 /* 隐藏滚动条但保留滚动功能 */
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   display: none;
-}
+} */
+/* 自定义滚动条样式 */
 
 .skeleton {
   position: absolute;

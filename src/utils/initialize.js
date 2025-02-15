@@ -19,19 +19,26 @@ function getdata() {
 //模拟数据
 const data = [
 	{
-		memory: { total: 16292, free: 10019, used: 6273 },
+		memory: {
+			total: 32292,
+			free: 26019,
+			used: 6273,
+		},
 		cpu: {
 			manufacturer: "Intel",
-			brand: "Core™ i5-10300H",
+			brand: "Core™ i5-10200H",
 			speed: 2.5,
-			cores: 8,
-			physicalCores: 4,
-			usage: 6,
+			cores: 16,
+			physicalCores: 8,
+			usage: 8,
 			temperature: null,
 		},
-		gpu: { models: ["NVIDIA GeForce RTX 2060"], temperature: [46] },
+		gpu: {
+			models: ["NVIDIA GeForce RTX 3060"],
+			temperature: [46],
+		},
 		network: {
-			ip4: ["192.168.31.48", "127.0.0.1", "", ""],
+			ip4: ["192.168.41.48", "127.0.0.1", "", ""],
 			ip6: ["", "::1", "", ""],
 			mac: [
 				"c8:b2:9b:f0:71:c5",
@@ -47,7 +54,7 @@ const data = [
 					type: "HD",
 					name: "Microsoft Storage Space Device",
 					vendor: "",
-					size: 998548992000,
+					size: 208548992000,
 					bytesPerSector: 4096,
 					totalCylinders: 15175,
 					totalHeads: 255,
@@ -66,7 +73,7 @@ const data = [
 					type: "SSD",
 					name: "SAMSUNG MZVLB512HBJQ-000L2",
 					vendor: "Samsung",
-					size: 512105932800,
+					size: 302105932800,
 					bytesPerSector: 512,
 					totalCylinders: 62260,
 					totalHeads: 255,
@@ -84,7 +91,7 @@ const data = [
 		},
 		system: {
 			systemInfo: {
-				manufacturer: "LENOVO",
+				manufacturer: "aaaa",
 				model: "81Y7",
 				version: "Lenovo Legion Y700",
 				serial: "PF2DLZER",
@@ -95,9 +102,13 @@ const data = [
 		},
 	},
 	{
-		memory: { total: 16292, free: 10299, used: 5993 },
+		memory: {
+			total: 8292,
+			free: 2299,
+			used: 5993,
+		},
 		cpu: {
-			manufacturer: "Intel",
+			manufacturer: "AMD",
 			brand: "Core™ i5-10300H",
 			speed: 2.5,
 			cores: 8,
@@ -105,7 +116,10 @@ const data = [
 			usage: 9,
 			temperature: null,
 		},
-		gpu: { models: ["NVIDIA GeForce RTX 2060"], temperature: [45] },
+		gpu: {
+			models: ["NVIDIA GeForce RTX 4060"],
+			temperature: [45],
+		},
 		network: {
 			ip4: ["192.168.31.48", "127.0.0.1", "", ""],
 			ip6: ["", "::1", "", ""],
@@ -171,25 +185,32 @@ const data = [
 		},
 	},
 	{
-		memory: { total: 16292, free: 10407, used: 5886 },
+		memory: {
+			total: 16292,
+			free: 10761,
+			used: 5531,
+		},
 		cpu: {
 			manufacturer: "Intel",
 			brand: "Core™ i5-10300H",
 			speed: 2.5,
 			cores: 8,
 			physicalCores: 4,
-			usage: 6,
-			temperature: null,
+			usage: 3,
 		},
-		gpu: { models: ["NVIDIA GeForce RTX 2060"], temperature: [45] },
+		gpu: {
+			models: ["NVIDIA GeForce RTX 2060"],
+		},
 		network: {
-			ip4: ["192.168.31.48", "127.0.0.1", "", ""],
-			ip6: ["", "::1", "", ""],
+			ip4: ["198.18.0.1", "192.168.31.48", "127.0.0.1", "", "", ""],
+			ip6: ["fe80::764d:c73:77b:b47a", "", "::1", "", "", ""],
 			mac: [
+				"00:00:00:00:00:00",
 				"c8:b2:9b:f0:71:c5",
 				"00:00:00:00:00:00",
 				"00:2b:67:d4:f3:47",
 				"6c:5d:3a:1b:2c:a5",
+				"",
 			],
 		},
 		disk: {
@@ -231,6 +252,38 @@ const data = [
 					interfaceType: "NVMe",
 					smartStatus: "Ok",
 					temperature: null,
+				},
+			],
+			diskusage: [
+				{
+					fs: "C:",
+					type: "NTFS",
+					size: 107374178304,
+					used: 80044953600,
+					available: 27329224704,
+					use: 74.55,
+					mount: "C:",
+					rw: true,
+				},
+				{
+					fs: "D:",
+					type: "NTFS",
+					size: 403396620288,
+					used: 212821499904,
+					available: 190575120384,
+					use: 52.76,
+					mount: "D:",
+					rw: true,
+				},
+				{
+					fs: "E:",
+					type: "NTFS",
+					size: 998444605440,
+					used: 685003341824,
+					available: 313441263616,
+					use: 68.61,
+					mount: "E:",
+					rw: true,
 				},
 			],
 		},

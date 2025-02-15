@@ -12,7 +12,7 @@ const router = createRouter({
 			component: HomeView,
 		},
 		{
-			path: "/motion",
+			path: "/motion/:uuid",
 			name: "motion",
 			component: MotionView,
 		},

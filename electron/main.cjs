@@ -5,8 +5,8 @@ let mainWindow;
 
 function createWindow() {
 	mainWindow = new BrowserWindow({
-		width: 1000,
-		height: 700,
+		width: 1054,
+		height: 720,
 		title: "WatchMe", // 设置窗口标题
 		webPreferences: {
 			preload: path.join(__dirname, "preload.cjs"),
@@ -90,8 +90,6 @@ async function getOsData(arg) {
 		const cpuSpeed = cpuInfo.speed;
 		const cpuCores = cpuInfo.cores;
 		const cpuPhysicalCores = cpuInfo.physicalCores;
-		const cpuTemperature = await si.cpuTemperature();
-		const cpuTemperature1 = cpuTemperature.main;
 
 		// 获取 CPU 占用率
 		const cpuLoad = await si.currentLoad();
@@ -100,9 +98,6 @@ async function getOsData(arg) {
 		// 获取 GPU 信息
 		const gpuInfo = await si.graphics();
 		const gpuModels = gpuInfo.controllers.map((controller) => controller.model);
-		const temperatureGpu = gpuInfo.controllers.map(
-			(controller) => controller.temperatureGpu
-		);
 
 		// 获取网络信息
 		const networkInfo = await si.networkInterfaces();
@@ -112,11 +107,11 @@ async function getOsData(arg) {
 
 		// 获取硬盘信息
 		const diskInfo = await si.diskLayout();
+		// 获取硬盘占用信息
+		const diskUsage = await si.fsSize();
 
 		// 获取系统信息
 		const systemInfo = await si.system();
-		const osDistro = systemInfo.distro;
-		const osRelease = systemInfo.release;
 
 		return {
 			memory: {
@@ -131,11 +126,9 @@ async function getOsData(arg) {
 				cores: cpuCores,
 				physicalCores: cpuPhysicalCores,
 				usage: cpuUsage,
-				temperature: cpuTemperature1,
 			},
 			gpu: {
 				models: gpuModels,
-				temperature: temperatureGpu,
 			},
 			network: {
 				ip4: ip4,
@@ -144,6 +137,7 @@ async function getOsData(arg) {
 			},
 			disk: {
 				diskinfo: diskInfo,
+				diskusage: diskUsage,
 			},
 			system: {
 				systemInfo: systemInfo,

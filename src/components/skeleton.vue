@@ -27,14 +27,17 @@ const close = () => {
       <v-app-bar color="#B2EBF2" density="compact" class="custom-app-bar">
         <v-app-bar-nav-icon variant="text" @click.stop="store.changedrawer" class="navicon"></v-app-bar-nav-icon>
 
-        <v-toolbar-title>WATCHME</v-toolbar-title>
+        <v-toolbar-title class="headtitle">
+          <RouterLink to="/">
+            <v-btn class="btntitle">WATCHME</v-btn>
+          </RouterLink>
+        </v-toolbar-title>
 
         <v-spacer></v-spacer>
 
-        <template v-if="$vuetify.display.mdAndUp">
-          <v-btn icon="mdi-minus-box " variant="text" @click="min()" class="navicon"></v-btn>
-          <v-btn icon="mdi-xamarin" variant="text" @click="close()" class="navicon"></v-btn>
-        </template>
+
+        <v-btn icon="mdi-minus-box " variant="text" @click="min()" class="navicon"></v-btn>
+        <v-btn icon="mdi-xamarin" variant="text" @click="close()" class="navicon"></v-btn>
 
         <!-- <v-btn icon="mdi-dots-vertical" variant="text"></v-btn> -->
       </v-app-bar>
@@ -59,11 +62,16 @@ const close = () => {
     </template>
   </v-navigation-drawer>
 </template>
-<style scoped>
+<style>
+::-webkit-scrollbar {
+  display: none;
+}
+
 .workside {
-  position: absolute;
+  position: fixed;
   bottom: 2%;
   right: 2%;
+  z-index: 999;
 }
 
 .custom-drawer {
@@ -71,22 +79,56 @@ const close = () => {
 }
 
 .custom-app-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  /* 确保 app-bar 在其他元素之上 */
   -webkit-app-region: drag;
   /* 添加 -webkit- 前缀以支持 Chromium 内核 */
 }
 
-.navicon {
-  -webkit-app-region: no-drag;
+.mainpage {
+  margin-top: 10px;
+  /* 为 app-bar 留出空间，假设 app-bar 高度为 64px，根据实际情况调整 */
+  height: calc(100vh - 10px);
+  /* 调整 mainpage 的高度，减去 app-bar 的高度 */
+  overflow-y: auto;
+  /* 当内容超出高度时显示垂直滚动条 */
+  position: relative;
+  /* 确保定位正常 */
 }
 
-.mainpage {
-  display: inline-block;
-  /* 转换为行内块元素 */
-  margin-top: 15px;
-  margin-bottom: 15px;
-  width: 100%;
-  height: 100%;
+.headtitle {
+  -webkit-app-region: no-drag;
+  max-width: 85px;
+  /* 你可以根据需要调整这个值 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /* background-color: #e0f7fa; */
+}
 
+.btntitle {
+  font-size: 14px;
+  /* 调整字体大小 */
+  font-weight: bold;
+  /* 加粗字体 */
+  color: #333;
+  /* 调整字体颜色 */
+  background-color: transparent;
+  /* 背景透明 */
+  border: none;
+  /* 去除边框 */
+  cursor: default;
+  /* 鼠标指针恢复默认 */
+  padding: 0;
+  /* 去除内边距 */
+}
+
+.navicon {
+  -webkit-app-region: no-drag;
 }
 
 /* 鼠标悬停效果样式 */
@@ -107,6 +149,7 @@ const close = () => {
   transform: translateY(-2px);
   /* 向上移动 2px */
 }
+
 
 /* 新增针对 v-layout 的样式 */
 .layout {}

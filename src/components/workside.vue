@@ -17,13 +17,13 @@ async function callMainProcessMethod() {
     store2.getCurrentComputer(result.system.systemInfo.uuid);
     store2.showWaiting = false;
 
-
     store3.snackbar = true;
     store3.text = '获取成功';
     store3.color1 = 'success'
   } catch (error) {
-    store2.showWaiting.value = false;
+    store2.showWaiting = false;
     console.error('Error calling main process method:', error);
+
     store3.snackbar = true;
     store3.text = '获取失败';
     store3.color1 = 'orange-darken-2'
@@ -43,7 +43,7 @@ async function callMainProcessMethod() {
     <!-- 开启监听（会消耗一部分被监听端的性能） -->
     <v-btn key="2" icon="mdi-motion-play"></v-btn>
     <!-- 图形化显示 -->
-    <RouterLink key="3" to="/motion">
+    <RouterLink key="3" :to="`/motion/${store2.computerNow.system.systemInfo.uuid}`">
       <v-btn icon="mdi-chart-bar"></v-btn>
     </RouterLink>
     <!-- 重新加载 -->

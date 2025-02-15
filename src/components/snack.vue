@@ -4,24 +4,6 @@ import { useSnackdataStore } from '@/stores/snackdata';
 
 const store = useSnackdataStore();
 
-// onMounted(() => {
-//   if (props.data && props.data.text) {
-//     store.text = props.data.text;
-//     store.color1 = props.data.color1;
-//     store.color2 = props.data.color2;
-//   }
-//   if (props.data && props.data.timeout) {
-//     store.timeout = props.data.timeout;//默认2s
-//   }
-// })
-
-// 获取传入的参数
-// const props = defineProps({
-//   data: {
-//     type: Object,
-//     required: true,
-//   }
-// });
 </script>
 <template>
   <div class="text-center">

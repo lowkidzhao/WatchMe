@@ -14,6 +14,8 @@ export const useComputersStore = defineStore("computer", () => {
 		);
 		if (index !== -1) {
 			// 如果存在相同 uuid 的电脑信息，则替换原有信息
+			console.log("存在相同 uuid 的电脑信息");
+
 			computers.value[index] = newComputer;
 		} else {
 			// 如果不存在，则添加新的电脑信息

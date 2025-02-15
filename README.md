@@ -6,7 +6,7 @@
 
 ---
 
-## electron + vue3 + pinia + javascript + vuetify
+## Electron + Vue3 + Pinia + JavaScript + Vuetify +ECharts
 
 ```bash
 # start dev
