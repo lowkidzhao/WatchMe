@@ -113,7 +113,7 @@ async function getOsData(arg) {
 
 		// 获取 GPU 信息
 		const gpuInfo = await si.graphics();
-		const gpuModels = gpuInfo.controllers.map((controller) => controller.model);
+		console.log(gpuInfo);
 
 		// 获取网络信息
 		const networkInfo = await si.networkInterfaces();
@@ -144,7 +144,7 @@ async function getOsData(arg) {
 				usage: cpuUsage,
 			},
 			gpu: {
-				models: gpuModels,
+				models: gpuInfo,
 			},
 			network: {
 				ip4: ip4,

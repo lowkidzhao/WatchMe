@@ -40,12 +40,12 @@ async function callMainProcessMethod() {
     <RouterLink key="1" :to="`/info/${store2.computerNow.system.systemInfo.uuid}`">
       <v-btn icon="$info"></v-btn>
     </RouterLink>
-    <!-- 开启监听（会消耗一部分被监听端的性能） -->
-    <v-btn key="2" icon="mdi-motion-play"></v-btn>
     <!-- 图形化显示 -->
     <RouterLink key="3" :to="`/motion/${store2.computerNow.system.systemInfo.uuid}`">
       <v-btn icon="mdi-chart-bar"></v-btn>
     </RouterLink>
+    <!-- 开启监听（会消耗一部分被监听端的性能） -->
+    <v-btn key="2" icon="mdi-motion-play"></v-btn>
     <!-- 重新加载 -->
     <v-btn key="4" icon="mdi-reload" @click="callMainProcessMethod()"></v-btn>
   </v-speed-dial>

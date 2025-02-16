@@ -26,8 +26,9 @@ void
 
 ---
 
-## about it
+## 关于
 
 ```bash
-vite-plugin-vuetify（加载器减少打包体积）
+可以获取本地机器信息
+云服务使用厂商API
 ```

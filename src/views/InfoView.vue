@@ -61,8 +61,32 @@ const convertToGB = computed(() => {
       <v-card class="info-card">
         <v-card-title class="card-title">GPU 信息</v-card-title>
         <v-card-text class="card-text">
-          <p>型号: {{ store2.computerNow.gpu.models.join(', ') }}</p>
-          <!-- <p>温度: {{ store2.computerNow.gpu.temperature[0] }} °C</p> -->
+          <!-- 循环展示多个 GPU 控制器信息 -->
+          <template v-for="(controller, index) in store2.computerNow.gpu.models.controllers" :key="index">
+            <p>型号: {{ controller.model }}</p>
+            <p>显存: {{ controller.vram }} MB</p>
+            <p>显存使用: {{ controller.memoryUsed }} MB</p>
+            <p>显存空闲: {{ controller.memoryFree }} MB</p>
+            <p>GPU 利用率: {{ controller.utilizationGpu }}%</p>
+            <p>显存利用率: {{ controller.utilizationMemory }}%</p>
+            <p>温度: {{ controller.temperatureGpu }} °C</p>
+            <p>功耗: {{ controller.powerDraw }} W</p>
+            <p>核心频率: {{ controller.clockCore }} MHz</p>
+            <p>显存频率: {{ controller.clockMemory }} MHz</p>
+          </template>
+        </v-card-text>
+      </v-card>
+      <!-- 显示器信息 -->
+      <v-card class="info-card">
+        <v-card-title class="card-title">显示器信息</v-card-title>
+        <v-card-text class="card-text">
+          <!-- 循环展示多个显示器信息 -->
+          <template v-for="(display, index) in store2.computerNow.gpu.models.displays" :key="index">
+            <p>显示器型号: {{ display.model }}</p>
+            <p>连接方式: {{ display.connection }}</p>
+            <p>分辨率: {{ display.resolutionX }}x{{ display.resolutionY }}</p>
+            <p>刷新率: {{ display.currentRefreshRate }} Hz</p>
+          </template>
         </v-card-text>
       </v-card>
 
