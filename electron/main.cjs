@@ -18,7 +18,23 @@ function createWindow() {
 		// 隐藏窗口边框
 		frame: false,
 	});
-
+	// 设置 Content Security Policy
+	mainWindow.webContents.session.webRequest.onHeadersReceived(
+		(details, callback) => {
+			// 定义 CSP 策略，考虑 Vue 项目特性
+			let csp =
+				"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'";
+			if (process.env.NODE_ENV === "development") {
+				csp += " http://localhost:5173";
+			}
+			callback({
+				responseHeaders: {
+					...details.responseHeaders,
+					"Content-Security-Policy": [csp],
+				},
+			});
+		}
+	);
 	if (process.env.NODE_ENV === "development") {
 		mainWindow.loadURL("http://localhost:5173");
 	} else {

@@ -1,9 +1,10 @@
 <script setup>
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, reactive } from 'vue';
 import { useComputersStore } from '@/stores/mycomputers';
 import { useRoute } from 'vue-router';
 import { onMounted } from 'vue';
 import * as echarts from 'echarts';
+import { nextTick } from 'vue';
 
 const route = useRoute();
 const store2 = useComputersStore();
@@ -13,7 +14,8 @@ const uuid = ref(route.params.uuid);
 // 定义 ECharts 容器的引用，仅保留内存和硬盘图表的引用
 const memoryChartRef = ref(null);
 // 初始化 diskChartRefs 为一个空数组
-const diskChartRefs = ref([]);
+// 使用 reactive 重写 diskChartRefs
+const diskChartRefs = reactive([]);
 
 // 计算属性，将字节转换为 GB
 const convertToGB = computed(() => {
@@ -23,7 +25,7 @@ const convertToGB = computed(() => {
 });
 
 // 初始化图表函数
-const initCharts = () => {
+const initCharts = async () => {
   // 检查数据有效性
   if (!store2.computerNow || !store2.computerNow.memory || !store2.computerNow.disk || !store2.computerNow.disk.diskinfo) {
     console.log('数据无效，无法初始化图表');
@@ -67,16 +69,14 @@ const initCharts = () => {
     };
     memoryChart.setOption(memoryOption);
   }
-
+  await nextTick();
   // 初始化硬盘信息图表
   const diskUsage = store2.computerNow.disk.diskusage;
   diskUsage.forEach((disk, index) => {
-    console.log(diskChartRefs.value); // 输出内部的值数组
-
-    if (diskChartRefs.value[index]) { // 检查 DOM 元素是否存在
-      let diskChart = echarts.getInstanceByDom(diskChartRefs.value[index]);
+    if (diskChartRefs[index]) {
+      let diskChart = echarts.getInstanceByDom(diskChartRefs[index]);
       if (!diskChart) {
-        diskChart = echarts.init(diskChartRefs.value[index]);
+        diskChart = echarts.init(diskChartRefs[index]);
       }
       const diskData = [
         { value: disk.used, name: '已使用' },
@@ -113,10 +113,12 @@ const initCharts = () => {
       };
       diskChart.setOption(diskOption);
     } else {
-      console.log(`diskChartRefs.value[${index}] 不存在，无法初始化图表`);
+      console.log(diskChartRefs);
+      console.log(`diskChartRefs[${index}] 不存在，无法初始化图表`);
     }
-  });
-};
+
+  })
+}
 
 // 封装数据获取和图表更新逻辑
 const fetchAndUpdateCharts = () => {
@@ -142,20 +144,14 @@ watch(() => route.params.uuid, (newUuid) => {
     <!-- 硬盘信息图表容器 -->
     <div v-for="(disk, index) in store2.computerNow?.disk?.diskusage || []" :key="index">
       <div :ref="(el) => {
-        // 确保 diskChartRefs.value 是数组且长度足够
-        if (!Array.isArray(diskChartRefs.value)) {
-          diskChartRefs.value = [];
+        // 确保 diskChartRefs 是数组且长度足够
+        while (diskChartRefs.length <= index) {
+          diskChartRefs.push(null);
         }
-        while (diskChartRefs.value.length <= index) {
-          diskChartRefs.value.push(null);
-        }
-        diskChartRefs.value[index] = el;
+        diskChartRefs[index] = el;
       }" class="chart-item"></div>
     </div>
   </div>
-  <span>
-    {{ store2.computerNow?.disk?.diskusage }}
-  </span>
 </template>
 <style scoped>
 .chart-container {
