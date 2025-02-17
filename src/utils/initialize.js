@@ -1,405 +1,58 @@
 import { useComputersStore } from "@/stores/mycomputers";
 
-export default function initialize() {
+export default async function initialize() {
 	// 初始化函数
-	getdata();
+	await getdata();
 }
-
-function getdata() {
-	localStorage.setItem("computers", JSON.stringify(data));
+async function getdata() {
 	// 获取数据函数
 	const store = useComputersStore();
+	// 从本地存储中获取计算机信息
 	const getComputers = JSON.parse(localStorage.getItem("computers"));
 	if (getComputers) {
+		// 将获取到的计算机信息赋值给 store 中的 computers
 		store.computers = getComputers;
-		store.computerNow = getComputers[0];
+		// 如果有计算机信息，将第一条信息赋值给当前选中的计算机
+		if (getComputers.length > 0) {
+			store.computerNow = getComputers[0];
+		}
+	} else {
+		// 将模拟数据存入本地存储
+		localStorage.setItem("computers", JSON.stringify(data));
 	}
 }
 
 //模拟数据
 const data = [
 	{
-		memory: {
-			total: 64000,
-			free: 50000,
-			used: 14000,
-		},
-		cpu: {
-			manufacturer: "Intel",
-			brand: "Core™ i9-13900K",
-			speed: 3.0,
-			cores: 24,
-			physicalCores: 16,
-			usage: 15,
-			temperature: 50,
-		},
+		memory: {},
+		cpu: {},
 		gpu: {
 			models: {
-				controllers: [
-					{
-						vendor: "NVIDIA",
-						model: "NVIDIA GeForce RTX 4090",
-						bus: "PCIe 5.0",
-						vram: 24576,
-						vramDynamic: false,
-						subDeviceId: "0x1234ABCD",
-						driverVersion: "531.41",
-						name: "NVIDIA GeForce RTX 4090",
-						pciBus: "00000000:01:00.0",
-						memoryTotal: 24576,
-						memoryUsed: 3000,
-						memoryFree: 21576,
-						utilizationGpu: 10,
-						utilizationMemory: 12,
-						temperatureGpu: 45,
-						powerDraw: 150,
-						clockCore: 2235,
-						clockMemory: 9000,
-					},
-				],
-				displays: [
-					{
-						vendor: "Dell",
-						model: "UltraSharp U2723QE",
-						deviceName: "\\\\.\\DISPLAY1",
-						main: true,
-						builtin: false,
-						connection: "DP",
-						resolutionX: 3840,
-						resolutionY: 2160,
-						sizeX: 60,
-						sizeY: 34,
-						pixelDepth: 32,
-						currentResX: 3840,
-						currentResY: 2160,
-						positionX: 0,
-						positionY: 0,
-						currentRefreshRate: 60,
-					},
-				],
+				controllers: [{}],
+				displays: [{}],
 			},
 		},
 		network: {
-			ip4: ["192.168.1.100", "127.0.0.1"],
-			ip6: ["fe80::1234:5678:abcd:ef01", "::1"],
-			mac: ["00:11:22:33:44:55"],
+			ip4: [],
+			ip6: [],
+			mac: [],
 		},
 		disk: {
-			diskinfo: [
-				{
-					device: "\\\\.\\PHYSICALDRIVE0",
-					type: "SSD",
-					name: "Samsung 980 PRO",
-					vendor: "Samsung",
-					size: 1000204886016,
-					bytesPerSector: 512,
-					totalCylinders: 121601,
-					totalHeads: 255,
-					totalSectors: 1953525168,
-					totalTracks: 31008336,
-					tracksPerCylinder: 255,
-					sectorsPerTrack: 63,
-					firmwareRevision: "5B2QGXA7",
-					serialNum: "S5XJNX0M7012345",
-					interfaceType: "NVMe",
-					smartStatus: "Ok",
-					temperature: 35,
-				},
-			],
-			diskusage: [
-				{
-					fs: "C:",
-					type: "NTFS",
-					size: 931514584064,
-					used: 200000000000,
-					available: 731514584064,
-					use: 21.47,
-					mount: "C:",
-					rw: true,
-				},
-			],
+			diskinfo: [{}],
+			diskusage: [],
 		},
 		system: {
 			systemInfo: {
-				manufacturer: "Dell",
-				model: "XPS 8940",
-				version: "Dell XPS Desktop",
-				serial: "ABC123456",
-				uuid: "12345678-9abc-def0-1234-56789abcdef0",
-				sku: "Dell_XPS_8940",
-				virtual: false,
-			},
-		},
-	},
-	{
-		memory: {
-			total: 32768, // 32GB
-			free: 20000,
-			used: 12768,
-		},
-		cpu: {
-			manufacturer: "AMD",
-			brand: "Ryzen 9 7950X",
-			speed: 4.5,
-			cores: 16,
-			physicalCores: 16,
-			usage: 20,
-			temperature: 55,
-		},
-		gpu: {
-			models: {
-				controllers: [
-					{
-						vendor: "NVIDIA",
-						model: "NVIDIA GeForce RTX 4070 Ti",
-						bus: "PCIe 4.0",
-						vram: 12288,
-						vramDynamic: false,
-						subDeviceId: "0x5678ABCD",
-						driverVersion: "536.23",
-						name: "NVIDIA GeForce RTX 4070 Ti",
-						pciBus: "00000000:01:00.0",
-						memoryTotal: 12288,
-						memoryUsed: 2500,
-						memoryFree: 9788,
-						utilizationGpu: 18,
-						utilizationMemory: 20,
-						temperatureGpu: 50,
-						powerDraw: 180,
-						clockCore: 2310,
-						clockMemory: 7000,
-					},
-				],
-				displays: [
-					{
-						vendor: "LG",
-						model: "UltraGear 27GN950-B",
-						deviceName: "\\\\.\\DISPLAY1",
-						main: true,
-						builtin: false,
-						connection: "DP",
-						resolutionX: 2560,
-						resolutionY: 1440,
-						sizeX: 60,
-						sizeY: 34,
-						pixelDepth: 32,
-						currentResX: 2560,
-						currentResY: 1440,
-						positionX: 0,
-						positionY: 0,
-						currentRefreshRate: 240,
-					},
-				],
-			},
-		},
-		network: {
-			ip4: ["192.168.1.102", "127.0.0.1"],
-			ip6: ["fe80::5678:abcd:1234:ef01", "::1"],
-			mac: ["22:33:44:55:66:77"],
-		},
-		disk: {
-			diskinfo: [
-				{
-					device: "\\\\.\\PHYSICALDRIVE0",
-					type: "SSD",
-					name: "Crucial P5 Plus",
-					vendor: "Crucial",
-					size: 1000204886016,
-					bytesPerSector: 512,
-					totalCylinders: 121601,
-					totalHeads: 255,
-					totalSectors: 1953525168,
-					totalTracks: 31008336,
-					tracksPerCylinder: 255,
-					sectorsPerTrack: 63,
-					firmwareRevision: "CT1000P5PSSD8",
-					serialNum: "123456789ABC",
-					interfaceType: "NVMe",
-					smartStatus: "Ok",
-					temperature: 38,
-				},
-			],
-			diskusage: [
-				{
-					fs: "C:",
-					type: "NTFS",
-					size: 931514584064,
-					used: 300000000000,
-					available: 631514584064,
-					use: 32.2,
-					mount: "C:",
-					rw: true,
-				},
-			],
-		},
-		system: {
-			systemInfo: {
-				manufacturer: "HP",
-				model: "OMEN 30L Gaming Desktop GT22-0150",
-				version: "HP OMEN Gaming Desktop",
-				serial: "DEF789012",
-				uuid: "23456789-abc0-def1-2345-6789abcdef01",
-				sku: "HP_OMEN_30L",
-				virtual: false,
-			},
-		},
-	},
-	{
-		memory: {
-			total: 16292,
-			free: 10393,
-			used: 5899,
-		},
-		cpu: {
-			manufacturer: "Intel",
-			brand: "Core™ i5-10300H",
-			speed: 2.5,
-			cores: 8,
-			physicalCores: 4,
-			usage: 2,
-		},
-		gpu: {
-			models: {
-				controllers: [
-					{
-						vendor: "NVIDIA",
-						model: "NVIDIA GeForce RTX 2060",
-						bus: "PCI",
-						vram: 6144,
-						vramDynamic: false,
-						subDeviceId: "0x3F8D17AA",
-						driverVersion: "572.16",
-						name: "NVIDIA GeForce RTX 2060",
-						pciBus: "00000000:01:00.0",
-						memoryTotal: 6144,
-						memoryUsed: 616,
-						memoryFree: 5340,
-						utilizationGpu: 1,
-						utilizationMemory: 1,
-						temperatureGpu: 46,
-						powerDraw: 20.32,
-						clockCore: 960,
-						clockMemory: 5500,
-					},
-				],
-				displays: [
-					{
-						vendor: "(Standard monitor types)",
-						model: "Generic PnP Monitor",
-						deviceName: "\\\\.\\DISPLAY1",
-						main: true,
-						builtin: false,
-						connection: "DP",
-						resolutionX: 1920,
-						resolutionY: 1080,
-						sizeX: 60,
-						sizeY: 34,
-						pixelDepth: 32,
-						currentResX: 1920,
-						currentResY: 1080,
-						positionX: 0,
-						positionY: 0,
-						currentRefreshRate: 144,
-					},
-				],
-			},
-		},
-		network: {
-			ip4: ["198.18.0.1", "192.168.31.48", "127.0.0.1", "", "", ""],
-			ip6: ["fe80::1381:51c2:d01c:4645", "", "::1", "", "", ""],
-			mac: [
-				"00:00:00:00:00:00",
-				"c8:b2:9b:f0:71:c5",
-				"00:00:00:00:00:00",
-				"00:2b:67:d4:f3:47",
-				"6c:5d:3a:1b:2c:a5",
-				"",
-			],
-		},
-		disk: {
-			diskinfo: [
-				{
-					device: "\\\\.\\PHYSICALDRIVE2",
-					type: "HD",
-					name: "Microsoft Storage Space Device",
-					vendor: "",
-					size: 998548992000,
-					bytesPerSector: 4096,
-					totalCylinders: 15175,
-					totalHeads: 255,
-					totalSectors: 243786375,
-					totalTracks: 3869625,
-					tracksPerCylinder: 255,
-					sectorsPerTrack: 63,
-					firmwareRevision: "0.1",
-					serialNum: "{7fe6e9cc-a30b-461f-9cf7-3bfba6c2e61c}",
-					interfaceType: "SCSI",
-					smartStatus: "Ok",
-					temperature: null,
-				},
-				{
-					device: "\\\\.\\PHYSICALDRIVE1",
-					type: "SSD",
-					name: "SAMSUNG MZVLB512HBJQ-000L2",
-					vendor: "Samsung",
-					size: 512105932800,
-					bytesPerSector: 512,
-					totalCylinders: 62260,
-					totalHeads: 255,
-					totalSectors: 1000206900,
-					totalTracks: 15876300,
-					tracksPerCylinder: 255,
-					sectorsPerTrack: 63,
-					firmwareRevision: "3L1QEXF7",
-					serialNum: "0025_3886_01D3_9668.",
-					interfaceType: "NVMe",
-					smartStatus: "Ok",
-					temperature: null,
-				},
-			],
-			diskusage: [
-				{
-					fs: "C:",
-					type: "NTFS",
-					size: 107374178304,
-					used: 81929371648,
-					available: 25444806656,
-					use: 76.3,
-					mount: "C:",
-					rw: true,
-				},
-				{
-					fs: "D:",
-					type: "NTFS",
-					size: 403396620288,
-					used: 212824449024,
-					available: 190572171264,
-					use: 52.76,
-					mount: "D:",
-					rw: true,
-				},
-				{
-					fs: "E:",
-					type: "NTFS",
-					size: 998444605440,
-					used: 685071335424,
-					available: 313373270016,
-					use: 68.61,
-					mount: "E:",
-					rw: true,
-				},
-			],
-		},
-		system: {
-			systemInfo: {
-				manufacturer: "LENOVO",
-				model: "81Y7",
-				version: "Lenovo Legion Y7000 2020H",
-				serial: "PF2DLZER",
+				manufacturer: "",
+				model: "",
+				version: "",
+				serial: "",
 				uuid: "beb85a58-c4ab-11ea-80de-002b67d4f347",
-				sku: "LENOVO_MT_81Y7_BU_idea_FM_IDEAPAD",
+				sku: "",
 				virtual: false,
 			},
 		},
+		home: true,
 	},
 ];

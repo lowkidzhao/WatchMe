@@ -8,6 +8,8 @@ import { RouterLink } from 'vue-router';
 const store = useControllersStore();
 const store2 = useComputersStore();
 const store3 = useSnackdataStore();
+const isSpeedDialOpen = ref(false); // 控制 v-speed-dial 的展开状态
+
 // 调用electronAPI获取系统信息
 async function callMainProcessMethod() {
   try {
@@ -29,25 +31,38 @@ async function callMainProcessMethod() {
     store3.color1 = 'orange-darken-2'
   }
 }
+
+// 点击按钮时阻止 v-speed-dial 收回
+const handleButtonClick = async () => {
+  event.preventDefault(); // 阻止事件默认行为
+  event.stopPropagation(); // 阻止事件冒泡
+  isSpeedDialOpen.value = true;
+  console.log('isSpeedDialOpen:', isSpeedDialOpen.value); // 添加调试信息
+  await callMainProcessMethod();
+};
 </script>
 
 <template>
-  <v-speed-dial location="top center" transition="slide-y-reverse-transition">
+  <v-speed-dial location="top center" transition="slide-y-reverse-transition" v-model="isSpeedDialOpen">
     <template v-slot:activator="{ props: activatorProps }">
       <v-fab v-bind="activatorProps" size="large" icon="mdi-bank-outline"></v-fab>
     </template>
     <!-- 显示监控端信息 -->
-    <RouterLink key="1" :to="`/info/${store2.computerNow.system.systemInfo.uuid}`">
+    <RouterLink
+      v-if="store2.computerNow && store2.computerNow.system && store2.computerNow.system.systemInfo && store2.computerNow.system.systemInfo.uuid"
+      key="1" :to="`/info/${store2.computerNow.system.systemInfo.uuid}`">
       <v-btn icon="$info"></v-btn>
     </RouterLink>
     <!-- 图形化显示 -->
-    <RouterLink key="3" :to="`/motion/${store2.computerNow.system.systemInfo.uuid}`">
+    <RouterLink
+      v-if="store2.computerNow && store2.computerNow.system && store2.computerNow.system.systemInfo && store2.computerNow.system.systemInfo.uuid"
+      key="3" :to="`/motion/${store2.computerNow.system.systemInfo.uuid}`">
       <v-btn icon="mdi-chart-bar"></v-btn>
     </RouterLink>
-    <!-- 开启监听（会消耗一部分被监听端的性能） -->
-    <v-btn key="2" icon="mdi-motion-play"></v-btn>
+    <!-- 获取云服务器链接 -->
+    <v-btn key="2" icon="mdi-link-box-variant"></v-btn>
     <!-- 重新加载 -->
-    <v-btn key="4" icon="mdi-reload" @click="callMainProcessMethod()"></v-btn>
+    <v-btn key="4" icon="mdi-refresh" @click="handleButtonClick" :loading="store2.showWaiting"></v-btn>
   </v-speed-dial>
 </template>
 

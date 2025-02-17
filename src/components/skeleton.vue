@@ -46,7 +46,7 @@ const close = () => {
       </v-main>
     </v-layout>
   </v-card>
-  <v-navigation-drawer v-model="store.drawerside" temporary class="custom-drawer">
+  <v-navigation-drawer v-model="store.drawerside" temporary class="custom-drawer" :width="350">
     <v-list-item title="仓库" style="font-size: 50px;"></v-list-item>
     <v-divider></v-divider>
     <!-- 使用 v-if 和 v-else 控制显示内容 -->
@@ -54,18 +54,33 @@ const close = () => {
       <RouterLink v-for="computer in store2.computers" :key="computer.system.systemInfo.uuid"
         :to="`/info/${computer.system.systemInfo.uuid}`">
         <v-list-item class="hover-effect" :title="computer.system.systemInfo.name || computer.system.systemInfo.version"
-          :subtitle="computer.network.ip4[0]"></v-list-item>
+          subtitle="本机"></v-list-item>
       </RouterLink>
     </template>
     <template v-else>
       <v-list-item title="暂无计算机信息" subtitle="请添加计算机"></v-list-item>
     </template>
+
+    <!-- 新增腾讯云目录 -->
+    <v-expansion-panels>
+      <v-expansion-panel title="腾讯云"
+        text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima">
+      </v-expansion-panel>
+    </v-expansion-panels>
+
+    <!-- 阿里云目录 -->
+    <v-expansion-panels>
+      <v-expansion-panel title="阿里云"
+        text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima ">
+      </v-expansion-panel>
+    </v-expansion-panels>
   </v-navigation-drawer>
 </template>
 <style>
 ::-webkit-scrollbar {
   display: none;
 }
+
 
 .workside {
   position: fixed;

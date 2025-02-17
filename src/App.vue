@@ -5,11 +5,13 @@ import initialize from './utils/initialize.js';
 import snack from './components/snack.vue';
 
 // 监听关闭信号
-onMounted(() => {
+onMounted(async () => {
 
   console.log('Vue app is mounted.');
 
-  initialize();
+  // 等待初始化函数执行完成
+  await initialize();
+
 
   window.electronAPI.onCloseVueApp(() => {
     // 在这里可以添加关闭 Vue 应用的逻辑
@@ -40,6 +42,21 @@ onUnmounted(() => {
   display: none;
 } */
 /* 自定义滚动条样式 */
+@font-face {
+  font-family: 'AlibabaPuHuiTi';
+  /* 自定义字体名称 */
+  src: url('@/assets/fonts/AlibabaPuHuiTi-3-65-Medium.ttf') format('truetype'),
+    url('@/assets/fonts/AlibabaPuHuiTi-3-65-Medium.woff') format('truetype'),
+    url('@/assets/fonts/AlibabaPuHuiTi-3-65-Medium.woff2') format('truetype');
+
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* 将字体应用到全局 */
+body {
+  font-family: 'AlibabaPuHuiTi', sans-serif;
+}
 
 .skeleton {
   position: absolute;

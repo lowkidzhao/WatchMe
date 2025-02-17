@@ -23,9 +23,13 @@ function createWindow() {
 		(details, callback) => {
 			// 定义 CSP 策略，考虑 Vue 项目特性
 			let csp =
-				"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'";
+				"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self';";
 			if (process.env.NODE_ENV === "development") {
-				csp += " http://localhost:5173";
+				// 将 http://localhost:5173 添加到 font-src 指令的值中
+				csp = csp.replace(
+					"font-src 'self'",
+					"font-src 'self' http://localhost:5173"
+				);
 			}
 			callback({
 				responseHeaders: {
@@ -113,7 +117,7 @@ async function getOsData(arg) {
 
 		// 获取 GPU 信息
 		const gpuInfo = await si.graphics();
-		console.log(gpuInfo);
+		// console.log(gpuInfo);
 
 		// 获取网络信息
 		const networkInfo = await si.networkInterfaces();
