@@ -8,7 +8,7 @@ const { app } = require("electron");
 const LighthouseClient = tencentcloud.lighthouse.v20200324.Client;
 
 // 定义配置文件路径，可根据实际情况调整
-const CONFIG_FILE_PATH = path.join(app.getAppPath(), "config.json");
+const CONFIG_FILE_PATH = path.join(app.getPath("userData"), "config.json");
 
 // 读取配置文件并返回配置对象
 const readConfig = () => {

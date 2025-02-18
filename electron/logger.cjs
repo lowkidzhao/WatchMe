@@ -3,7 +3,9 @@ const { app } = require("electron");
 const path = require("path");
 
 // 定义日志文件夹路径
-const LOG_FOLDER_PATH = path.join(app.getAppPath(), "log");
+// 原代码：const LOG_FOLDER_PATH = path.join(app.getAppPath(), "log");
+// 修改后：
+const LOG_FOLDER_PATH = path.join(app.getPath("userData"), "log");
 // 确保日志文件夹存在
 const fs = require("fs");
 if (!fs.existsSync(LOG_FOLDER_PATH)) {

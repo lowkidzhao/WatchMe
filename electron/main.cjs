@@ -232,7 +232,7 @@ async function getOsData(arg) {
 const tencentcloudApi = require("./tencentcloud-api.cjs");
 const fs = require("fs");
 // 定义 config.json 文件的路径
-const configFilePath = path.join(app.getAppPath(), "config.json");
+const configFilePath = path.join(app.getPath("userData"), "config.json");
 
 // 检查文件是否存在
 fs.access(configFilePath, fs.constants.F_OK, (err) => {
