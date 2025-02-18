@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Splash Screen</title>
+		<style>
+			body {
+				/* 使用更具质感的背景颜色 */
+				background-color: #1a1a1a;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 100vh;
+				margin: 0;
+				/* 使用更现代的字体 */
+				font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+			}
+			.fade-in-text {
+				color: #00ffcc;
+				font-size: 64px;
+				/* 增加字体粗细 */
+				font-weight: bold;
+				/* 优化动画效果，添加淡入淡出效果 */
+				animation: fadeInOut 3s ease-in-out infinite;
+				/* 添加文字阴影，增强立体感 */
+				text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+			}
+			@keyframes fadeInOut {
+				0% {
+					opacity: 0;
+					transform: translateY(-20px);
+				}
+				50% {
+					opacity: 1;
+					transform: translateY(0);
+				}
+				100% {
+					opacity: 0;
+					transform: translateY(20px);
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="fade-in-text">WatchMe</div>
+	</body>
+</html>

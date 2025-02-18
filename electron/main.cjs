@@ -2,8 +2,21 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 
 let mainWindow;
+let splashWindow;
 
 function createWindow() {
+	// 创建开屏动画窗口
+	splashWindow = new BrowserWindow({
+		width: 400,
+		height: 300,
+		transparent: true,
+		frame: false,
+		alwaysOnTop: true,
+		center: true, // 确保窗口显示在屏幕中央
+	});
+	splashWindow.loadFile(path.join(__dirname, "splash.html"));
+
+	// 创建主窗口时设置 show 为 false，初始隐藏
 	mainWindow = new BrowserWindow({
 		width: 1054,
 		height: 720,
@@ -17,6 +30,8 @@ function createWindow() {
 		autoHideMenuBar: true,
 		// 隐藏窗口边框
 		frame: false,
+		backgroundColor: "#000000", // 设置主窗口背景颜色为黑色
+		show: false, // 初始隐藏主窗口
 	});
 	// 设置 Content Security Policy
 	mainWindow.webContents.session.webRequest.onHeadersReceived(
@@ -27,8 +42,8 @@ function createWindow() {
 			if (process.env.NODE_ENV === "development") {
 				// 将 http://localhost:5173 添加到 font-src 指令的值中
 				csp = csp.replace(
-					"font-src 'self'",
-					"font-src 'self' http://localhost:5173"
+					"font-src 'self';",
+					"font-src 'self' http://localhost:5173;"
 				);
 			}
 			callback({
@@ -44,7 +59,14 @@ function createWindow() {
 	} else {
 		mainWindow.loadFile(path.join(__dirname, "../dist/index.html"));
 	}
-
+	// 主窗口加载完成后显示主窗口并关闭开屏动画窗口
+	mainWindow.webContents.on("did-finish-load", () => {
+		if (splashWindow) {
+			splashWindow.close();
+			splashWindow = null;
+		}
+		mainWindow.show(); // 显示主窗口
+	});
 	mainWindow.on("closed", () => {
 		mainWindow = null;
 	});
@@ -168,3 +190,81 @@ async function getOsData(arg) {
 		return null;
 	}
 }
+
+// 引入 tencentcloud-api.js 中的函数
+const tencentcloudApi = require("./tencentcloud-api.cjs");
+const fs = require("fs");
+// 定义 config.json 文件的路径
+const configFilePath = path.join(app.getAppPath(), "config.json");
+
+// 检查文件是否存在
+fs.access(configFilePath, fs.constants.F_OK, (err) => {
+	if (err) {
+		// 文件不存在，创建默认配置
+		const defaultConfig = {
+			tencentcloud: {
+				credential: {
+					secretId: "",
+					secretKey: "",
+				},
+				region: "",
+				profile: {
+					httpProfile: {
+						endpoint: "",
+					},
+				},
+			},
+		};
+		const defaultConfigData = JSON.stringify(defaultConfig, null, 2);
+		fs.writeFile(configFilePath, defaultConfigData, "utf8", (writeErr) => {
+			if (writeErr) {
+				console.error("创建默认配置文件时出错:", writeErr);
+			} else {
+				console.log("默认配置文件已创建");
+				updateConfig();
+			}
+		});
+	} else {
+		console.log("配置文件已存在");
+	}
+});
+
+// 监听来自渲染进程的消息
+ipcMain.handle("call-tencentcloud-api", async (event, choice, params) => {
+	// 将 choice 转换为字符串
+	choice = String(choice);
+	console.log("接收到的 choice:", choice); // 确认 choice 是否正确接收
+	if (!choice) {
+		throw new Error("方法未指定");
+	}
+	try {
+		switch (choice) {
+			case "updataConfig":
+				try {
+					const result = await tencentcloudApi.updateConfig(params);
+					return result;
+				} catch (error) {
+					throw error;
+				}
+			case "getConfig":
+				try {
+					const result = await tencentcloudApi.getConfig();
+					return result;
+				} catch (error) {
+					throw error;
+				}
+			case "clientUse":
+				try {
+					const result = await tencentcloudApi.clientUse();
+					return result;
+				} catch (error) {
+					throw error;
+				}
+			default:
+				throw new Error("未找到对应的 API 方法");
+		}
+	} catch (error) {
+		console.error("处理 call-tencentcloud-api 时出错:", error);
+		throw error;
+	}
+});

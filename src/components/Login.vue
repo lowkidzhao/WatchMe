@@ -1,7 +1,12 @@
 <script setup>
-import tencentcloudApi from '@/utils/tencentcloud-api';
 
+async function fetchTencentCloudData() {
+  const params = {}
+  const result = await window.electronAPI.callTencentCloudAPI(params);
+  console.log('腾讯云 API 调用结果:', result);
+}
 </script>
 <template>
-  登录工具
+  <br>
+  <v-btn @click="fetchTencentCloudData()">登录 </v-btn>
 </template>
