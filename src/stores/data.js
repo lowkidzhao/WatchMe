@@ -1,45 +1,35 @@
-import { ref, computed } from "vue";
+import { reactive } from "vue";
 import { defineStore } from "pinia";
 
 export const useDataStore = defineStore("data", () => {
-	// cpu
-	const cpuname = ref("");
-	const cpuspeed = ref("");
-	const cputemp = ref("");
-	// gpu
-	const gpuname = ref("");
-	const gpuspeed = ref("");
-	const gputemp = ref("");
-	// ram
-	const totalram = ref("");
-	const usedram = ref("");
-	const freeram = ref("");
-	// storage
-	const totalstorage = ref("");
-	const usedstorage = ref("");
-	const freestorage = ref("");
-	// network
-	const netspeedup = ref("");
-	const netspeeddown = ref("");
+	const params = reactive({
+		tencentcloud: {
+			credential: {
+				secretId: "",
+				secretKey: "",
+			},
+			region: "",
+			profile: {
+				httpProfile: {
+					endpoint: "",
+				},
+			},
+		},
+	});
+	//服务器
+	const server = reactive({
+		Response: {
+			ProductList: [
+				{
+					Namespace: "test/17_01",
+					ProductEnName: "shan_17_01_policy01",
+					ProductName: "shan_17_01_policy01",
+				},
+			],
+			RequestId: "addfaffqqn",
+			TotalCount: 1,
+		},
+	});
 
-	function increment() {
-		count.value++;
-	}
-
-	return {
-		cpuname,
-		cpuspeed,
-		cputemp,
-		gpuname,
-		gpuspeed,
-		gputemp,
-		totalram,
-		usedram,
-		freeram,
-		totalstorage,
-		usedstorage,
-		freestorage,
-		netspeedup,
-		netspeeddown,
-	};
+	return { params, server };
 });

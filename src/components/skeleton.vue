@@ -2,11 +2,53 @@
 import { ref } from 'vue';
 import { useControllersStore } from '@/stores/controllers';
 import { useComputersStore } from '@/stores/mycomputers';
+import { useDataStore } from '@/stores/data';
+import { useSnackdataStore } from '@/stores/snackdata';
 import { RouterLink, RouterView } from 'vue-router'
 import WorkSide from '@/components/workside.vue'
+import { fetchTencentCloudUpdataConfig } from '@/utils/Tencentcloud-Api';
 
 const store = useControllersStore();
 const store2 = useComputersStore();
+const store3 = useDataStore();
+const store4 = useSnackdataStore();
+
+const comboboxItems = ref([
+  'ap-bangkok',
+  'ap-beijing',
+  'ap-chengdu',
+  'ap-chongqing',
+  'ap-guangzhou',
+  'ap-hongkong',
+  'ap-jakarta',
+  'ap-mumbai',
+  'ap-nanjing',
+  'ap-seoul',
+  'ap-shanghai',
+  'ap-shanghai-fsi',
+  'ap-shenzhen-fsi',
+  'ap-singapore',
+  'ap-tokyo',
+  'eu-frankfurt',
+  'na-ashburn',
+  'na-siliconvalley',
+  'sa-saopaulo']);
+async function handleSelect() {
+  let message = await fetchTencentCloudUpdataConfig(store3.params);
+  if (message != "更新成功") {
+    store4.error(message);
+  } else {
+    store4.success(message);
+  }
+}
+
+//工作台逻辑
+function worksideTrue() {
+  store.workview = true;
+}
+function worksideFalse() {
+  store.workview = false;
+}
 
 const min = () => {
   window.electronAPI.minimizeWindow();
@@ -15,9 +57,8 @@ const min = () => {
 const close = () => {
   window.electronAPI.closeWindow();
 }
-
-
 </script>
+
 <template>
   <div class="workside">
     <WorkSide />
@@ -54,24 +95,56 @@ const close = () => {
       <RouterLink v-for="computer in store2.computers" :key="computer.system.systemInfo.uuid"
         :to="`/info/${computer.system.systemInfo.uuid}`">
         <v-list-item class="hover-effect" :title="computer.system.systemInfo.name || computer.system.systemInfo.version"
-          subtitle="本机"></v-list-item>
+          subtitle="本机" @click="worksideFalse"></v-list-item>
       </RouterLink>
     </template>
     <template v-else>
       <v-list-item title="暂无计算机信息" subtitle="请添加计算机"></v-list-item>
     </template>
-
+    <v-divider></v-divider>
+    <RouterLink :to="`/server`">
+      <v-list-item class="hover-effect" title="服务器" subtitle="云服务" @click="worksideTrue"></v-list-item>
+    </RouterLink>
+    <v-divider></v-divider>
     <!-- 新增腾讯云目录 -->
     <v-expansion-panels>
-      <v-expansion-panel title="腾讯云"
-        text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima">
+      <v-expansion-panel title="腾讯云" :readonly="false">
+        <v-expansion-panel-text>
+          <v-row>
+            <v-col cols="6">
+              <v-text-field label="请输入secretId" v-model="store3.params.tencentcloud.credential.secretId"></v-text-field>
+            </v-col>
+            <v-col cols="6">
+              <v-text-field label="请输入secretKey"
+                v-model="store3.params.tencentcloud.credential.secretKey"></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-radio-group v-model="store3.params.tencentcloud.profile.httpProfile.endpoint" inline>
+              <v-radio label="轻量服务器" value="lighthouse.tencentcloudapi.com"></v-radio>
+              <v-radio label="云服务器" value="cvm.tencentcloudapi.com"></v-radio>
+            </v-radio-group>
+          </v-row>
+          <v-row>
+            <v-col cols="8">
+              <v-combobox label="地域" :items="comboboxItems" variant="solo-filled"
+                v-model="store3.params.tencentcloud.region"></v-combobox>
+            </v-col>
+            <v-col cols="4">
+              <v-btn color="primary" style="margin-top: 8px;" @click="handleSelect">应用</v-btn>
+            </v-col>
+          </v-row>
+        </v-expansion-panel-text>
+
       </v-expansion-panel>
     </v-expansion-panels>
 
     <!-- 阿里云目录 -->
     <v-expansion-panels>
-      <v-expansion-panel title="阿里云"
-        text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima ">
+      <v-expansion-panel title="阿里云" :readonly="false">
+        <v-expansion-panel-text>
+          待接入
+        </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
   </v-navigation-drawer>

@@ -7,6 +7,19 @@ export const useSnackdataStore = defineStore("snackdata", () => {
 	const text = ref("");
 	const color1 = ref("success");
 	const color2 = ref("white");
-
-	return { snackbar, timeout, text, color1, color2 };
+	// 修正函数定义语法
+	function success(message) {
+		text.value = message;
+		color1.value = "success";
+		color2.value = "white";
+		snackbar.value = true;
+	}
+	// 修正函数定义语法
+	function error(message) {
+		text.value = message;
+		color1.value = "error";
+		color2.value = "white";
+		snackbar.value = true;
+	}
+	return { snackbar, timeout, text, color1, color2, success, error };
 });

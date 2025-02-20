@@ -3,6 +3,9 @@ import { onMounted, onUnmounted } from 'vue';
 import skeleton from './components/skeleton.vue';
 import initialize from './utils/initialize.js';
 import snack from './components/snack.vue';
+import { useDataStore } from './stores/data';
+const store = useDataStore();
+
 
 // 监听关闭信号
 onMounted(async () => {
@@ -10,7 +13,8 @@ onMounted(async () => {
   console.log('Vue app is mounted.');
 
   // 等待初始化函数执行完成
-  await initialize();
+  const daf = await initialize();
+  store.params = daf;
 
 
   window.electronAPI.onCloseVueApp(() => {

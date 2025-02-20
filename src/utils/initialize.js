@@ -1,8 +1,11 @@
 import { useComputersStore } from "@/stores/mycomputers";
+import { fetchTencentCloudConfig } from "@/utils/Tencentcloud-Api";
 
 export default async function initialize() {
 	// 初始化函数
 	await getdata();
+	//获取云服务配置
+	return await fetchTencentCloudConfig();
 }
 async function getdata() {
 	// 获取数据函数
