@@ -31,10 +31,8 @@
     "concurrently": "^9.1.2",
     "cross-env": "^7.0.3",
     "electron": "^34.1.1",
-    "electron-builder": "^24.6.4",
-    "vite": "^6.0.11",
-    "vite-plugin-vue-devtools": "^7.7.1",
-    "wait-on": "^8.0.2"
+    "electron-builder": "^24.13.3",
+    "dmg-license": "^1.0.11"
   },
   "build": {
     "appId": "site.pushme.www",

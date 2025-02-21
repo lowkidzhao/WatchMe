@@ -26,7 +26,12 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm ci
+          # 修复 macOS 构建依赖
+          if [ "$RUNNER_OS" == "macOS" ]; then
+            npm install dmg-license@1.0.11 --no-save
+          fi
 
       - name: Build Electron app
         env:
