@@ -27,9 +27,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm ci
-          # 修复 macOS 构建依赖
-          if [ "$RUNNER_OS" == "macOS" ]; then
+          npm ci --omit=dev --no-optional
+          # 仅在 macOS 安装 DMG 相关依赖
+          if [[ "$RUNNER_OS" == "macOS" ]]; then
             npm install dmg-license@1.0.11 --no-save
           fi
 
