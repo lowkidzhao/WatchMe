@@ -41,6 +41,7 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
+        shell: bash # 明确指定使用 bash shell
         run: |
           npm ci
           if [ "${{ matrix.platform }}" == "mac" ]; then
