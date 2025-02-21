@@ -40,9 +40,11 @@ jobs:
       # 移除 npm audit fix 步骤（可能导致依赖不兼容）
       - name: Build application
         env:
-          CI: false # 禁用 CI 模式
+          CI: false
           ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES: "true"
-        run: npm run electron:build -- --linux --win --mac # 明确指定构建目标
+        run: |
+          npm run build
+          electron-builder --linux --win --mac
       # 添加 Linux 系统依赖（仅限 Ubuntu）
       - name: Install Linux dependencies
         if: matrix.os == 'ubuntu-latest'
