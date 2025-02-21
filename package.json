@@ -86,9 +86,6 @@
         "snap",
         "rpm"
       ],
-      "publish": [
-        "none"
-      ],
       "category": "Utility",
       "executableName": "WatchMe",
       "artifactName": "${productName}-${version}-linux.${ext}",
