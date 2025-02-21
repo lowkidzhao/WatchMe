@@ -1,8 +1,8 @@
 {
   "name": "watchme",
   "version": "0.0.1",
-  "private": true,
-  "type": "module",
+  "description": "系统监控工具 Application for system monitoring",
+  "author": "Pushme Me <1141846557@qq.com>",
   "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite",
