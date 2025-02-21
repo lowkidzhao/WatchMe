@@ -20,7 +20,8 @@ jobs:
         shell: bash
         run: |
           if [ "$RUNNER_OS" == "Windows" ]; then
-            rm -r -fo node_modules
+            # 修正Windows删除命令
+            cmd.exe /c "rd /s /q node_modules 2>nul || exit 0"
           else
             rm -rf node_modules
           fi
@@ -29,10 +30,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: "npm" # 添加 npm 缓存
+          cache: "npm"
 
       - name: Install dependencies
-        run: npm install --legacy-peer-deps # 修复可能的 peer dependencies 问题
+        run: |
+          npm install --legacy-peer-deps --ignore-scripts
+          # 选择性修复漏洞
+          npm audit fix --force || true
       # 移除 npm audit fix 步骤（可能导致依赖不兼容）
       - name: Build application
         env:
