@@ -3,35 +3,38 @@ name: Electron Build
 on:
   push:
     branches:
-      - main # 当 main 分支有推送时触发工作流
+      - main
 
 jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest] # 定义要运行的操作系统
+        os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3 # 检出代码到工作区
+        uses: actions/checkout@v3
+
+      - name: Delete node_modules
+        run: rm -rf node_modules
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3 # 设置 Node.js 环境
+        uses: actions/setup-node@v3
         with:
-          node-version: 18 # 指定 Node.js 版本
+          node-version: 18
 
       - name: Install dependencies
-        run: npm install # 安装项目依赖
+        run: npm install
 
       - name: Build application
-        run: npm run electron:build # 运行打包命令
+        run: npm run electron:build
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4 # 升级到 v4 版本
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os }}-build
-          path: dist_electron # 打包文件的输出目录
+          path: dist_electron
 
       - name: Display Linux build info (Optional)
         if: matrix.os == 'ubuntu-latest'
