@@ -25,14 +25,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
 
-      - name: Install dependencies
-        shell: bash
-        run: |
-          # 先安装 macOS 必需依赖
-          if [ "${{ matrix.os }}" == "macos-latest" ]; then
-            npm install dmg-license@1.0.11 --no-package-lock
-          fi
-          npm ci
+      - name: Install macOS dependencies
+        if: matrix.os == 'macos-latest'
+        run: npm install dmg-license@1.0.11 --no-package-lock
+      - name: Install all dependencies
+        run: npm ci
 
       - name: Build Electron app
         env:

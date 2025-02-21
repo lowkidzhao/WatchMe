@@ -8,6 +8,9 @@ import vueDevTools from "vite-plugin-vue-devtools";
 
 // https://vite.dev/config/
 export default defineConfig({
+	build: {
+		chunkSizeWarningLimit: 2500, // 将警告阈值提升到2.5MB
+	},
 	plugins: [
 		vue(),
 		vuetify({
