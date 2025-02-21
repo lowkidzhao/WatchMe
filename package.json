@@ -84,13 +84,13 @@
         "AppImage"
       ],
       "category": "Utility",
+      "executableName": "WatchMe",
       "artifactName": "${productName}-${version}-linux.${ext}",
       "synopsis": "A utility application for monitoring",
       "description": "一个用于监控的工具应用",
       "desktop": {
         "Name": "WatchMe",
         "Comment": "A utility application for monitoring",
-        "Exec": "WatchMe",
         "Icon": "WatchMe",
         "Terminal": "false",
         "Type": "Application",
