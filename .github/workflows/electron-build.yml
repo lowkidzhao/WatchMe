@@ -39,9 +39,12 @@ jobs:
         with:
           node-version: 18.x
           cache: "npm"
-
+          cache-dependency-path: |
+            package-lock.json
+            **/package.json
+          # 删除原cache-key参数
       - name: Install dependencies
-        shell: bash # 明确指定使用 bash shell
+        shell: bash
         run: |
           npm ci
           if [ "${{ matrix.platform }}" == "mac" ]; then
@@ -51,15 +54,14 @@ jobs:
       - name: Build Electron app
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: npm run electron:build -- ${{ matrix.target }} --publish never # 移除等号形式
+        run: npm run electron:build -- ${{ matrix.target }} --publish never
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: electron-build-${{ matrix.platform }} # 使用平台标识符
-          path: |
-            dist_electron/*.AppImage  # 仅上传 AppImage
-            !**/*.blockmap
+          name: electron-build-${{ matrix.platform }}
+          path: ${{ matrix.artifact-pattern }}
+          if-no-files-found: error # 可选：如果没找到文件则报错
 
       # Linux 系统特殊处理
       - name: Setup Linux dependencies
