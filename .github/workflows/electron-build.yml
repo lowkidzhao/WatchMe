@@ -26,9 +26,10 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
+        shell: bash # 显式指定使用 bash shell
         run: |
           npm ci
-          if [[ "$RUNNER_OS" == "macOS" ]]; then
+          if [ "$RUNNER_OS" == "macOS" ]; then  # 使用单括号语法
             npm install dmg-license@1.0.11 --no-package-lock
           fi
 
