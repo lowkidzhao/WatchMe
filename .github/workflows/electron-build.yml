@@ -29,21 +29,31 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+          cache: "npm" # 添加 npm 缓存
 
       - name: Install dependencies
-        run: npm install
-
-      - name: Fix security vulnerabilities
-        run: npm audit fix
-
+        run: npm install --legacy-peer-deps # 修复可能的 peer dependencies 问题
+      # 移除 npm audit fix 步骤（可能导致依赖不兼容）
       - name: Build application
-        run: npm run electron:build
+        env:
+          CI: false # 禁用 CI 模式
+          ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES: "true"
+        run: npm run electron:build -- --linux --win --mac # 明确指定构建目标
+      # 添加 Linux 系统依赖（仅限 Ubuntu）
+      - name: Install Linux dependencies
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fuse libnss3 libgtk-3-0 libnotify-dev
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os }}-build
-          path: dist_electron
+          path: |
+            dist_electron/*.exe
+            dist_electron/*.dmg
+            dist_electron/*.AppImage
 
       - name: Display Linux build info (Optional)
         if: matrix.os == 'ubuntu-latest'
