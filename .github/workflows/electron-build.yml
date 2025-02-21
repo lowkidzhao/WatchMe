@@ -1,68 +1,51 @@
-name: Electron Build
+name: Electron CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   build:
+    name: Build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [18.x]
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Delete node_modules
-        shell: bash
-        run: |
-          if [ "$RUNNER_OS" == "Windows" ]; then
-            # 修正Windows删除命令
-            cmd.exe /c "rd /s /q node_modules 2>nul || exit 0"
-          else
-            rm -rf node_modules
-          fi
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: ${{ matrix.node-version }}
           cache: "npm"
 
       - name: Install dependencies
-        run: |
-          npm install --legacy-peer-deps --ignore-scripts
-          # 选择性修复漏洞
-          npm audit fix --force || true
-      # 移除 npm audit fix 步骤（可能导致依赖不兼容）
-      - name: Build application
+        run: npm ci
+
+      - name: Build Electron app
         env:
-          CI: false
           ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES: "true"
-        run: |
-          npm run build
-          electron-builder --linux --win --mac
-      # 添加 Linux 系统依赖（仅限 Ubuntu）
-      - name: Install Linux dependencies
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y fuse libnss3 libgtk-3-0 libnotify-dev
+        run: npm run electron:build
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}-build
+          name: electron-build-${{ matrix.os }}
           path: |
             dist_electron/*.exe
             dist_electron/*.dmg
             dist_electron/*.AppImage
+            !**/*.blockmap
 
-      - name: Display Linux build info (Optional)
+      # Linux 系统特殊处理
+      - name: Setup Linux dependencies
         if: matrix.os == 'ubuntu-latest'
         run: |
-          echo "Linux build completed. Check the generated AppImage in the artifact."
-          ls -l dist_electron
+          sudo apt-get update
+          sudo apt-get install -y fuse libnss3 libgtk-3-0
