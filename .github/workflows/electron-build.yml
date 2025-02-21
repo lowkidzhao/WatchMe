@@ -28,7 +28,7 @@ jobs:
         run: npm run electron:build # 运行打包命令
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3 # 上传打包好的文件作为工件
+        uses: actions/upload-artifact@v4 # 升级到 v4 版本
         with:
           name: ${{ matrix.os }}-build
           path: dist_electron # 打包文件的输出目录
