@@ -51,7 +51,7 @@ jobs:
       - name: Build Electron app
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }} # 添加 GH_TOKEN 环境变量
-        run: npm run electron:build ${{ matrix.target }} --publish never # 添加发布策略参数
+        run: npm run electron:build -- ${{ matrix.target }} --publish=never
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
