@@ -8,7 +8,14 @@ import vueDevTools from "vite-plugin-vue-devtools";
 
 // https://vite.dev/config/
 export default defineConfig({
-	plugins: [vue(), vuetify(), vueJsx(), vueDevTools()],
+	plugins: [
+		vue(),
+		vuetify({
+			autoImport: true, // 自动导入 Vuetify 组件和指令
+		}),
+		vueJsx(),
+		vueDevTools(),
+	],
 	base: "./", // 设置为相对路径
 	resolve: {
 		alias: {
