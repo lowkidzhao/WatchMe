@@ -8,42 +8,54 @@ on:
 
 jobs:
   build:
-    name: Build on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        node-version: [18.x]
+        platform: [win, mac, linux]
+        include:
+          - platform: win
+            os: windows-latest
+            target: --win
+            runs-on: windows-latest
+            artifact-pattern: dist_electron/*.exe
+          - platform: mac
+            os: macos-latest
+            target: --mac
+            runs-on: macos-latest
+            artifact-pattern: dist_electron/*.dmg
+          - platform: linux
+            os: ubuntu-latest
+            target: --linux
+            runs-on: ubuntu-latest
+            artifact-pattern: dist_electron/*.AppImage
+
+    runs-on: ${{ matrix.runs-on }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 18.x
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 18.x
           cache: "npm"
 
-      - name: Install macOS dependencies
-        if: matrix.os == 'macos-latest'
-        run: npm install dmg-license@1.0.11 --no-package-lock
-      - name: Install all dependencies
-        run: npm ci
+      - name: Install dependencies
+        run: |
+          npm ci
+          if [ "${{ matrix.platform }}" == "mac" ]; then
+            npm install dmg-license@1.0.11 --no-package-lock
+          fi
 
       - name: Build Electron app
-        env:
-          ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES: "true"
-        run: npm run electron:build
+        run: npm run electron:build ${{ matrix.target }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: electron-build-${{ matrix.os }}
           path: |
-            dist_electron/*.exe
-            dist_electron/*.dmg
-            dist_electron/*.AppImage
+            ${{ matrix.artifact-pattern }}
             !**/*.blockmap
 
       # Linux 系统特殊处理
