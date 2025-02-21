@@ -49,14 +49,16 @@ jobs:
           fi
 
       - name: Build Electron app
-        run: npm run electron:build ${{ matrix.target }}
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }} # 添加 GH_TOKEN 环境变量
+        run: npm run electron:build ${{ matrix.target }} --publish never # 添加发布策略参数
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: electron-build-${{ matrix.os }}
+          name: electron-build-${{ matrix.platform }} # 使用平台标识符
           path: |
-            ${{ matrix.artifact-pattern }}
+            dist_electron/*.AppImage  # 仅上传 AppImage
             !**/*.blockmap
 
       # Linux 系统特殊处理
