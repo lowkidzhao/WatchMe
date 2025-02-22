@@ -33,11 +33,14 @@ const comboboxItems = ref([
   'na-ashburn',
   'na-siliconvalley',
   'sa-saopaulo']);
-async function handleSelect() {
+async function handleSelect(name) {
   let message = await fetchTencentCloudUpdataConfig(store3.params);
   if (message != "更新成功") {
     store4.error(message);
   } else {
+    console.log(name);
+
+    store3.cloud = name;
     store4.success(message);
   }
 }
@@ -99,7 +102,7 @@ const close = () => {
       </RouterLink>
     </template>
     <template v-else>
-      <v-list-item title="暂无计算机信息" subtitle="请添加计算机"></v-list-item>
+      <v-list-item title="暂无计算机信息" subtitle="请添加计算机" @click="worksideFalse"></v-list-item>
     </template>
     <v-divider></v-divider>
     <RouterLink :to="`/server`">
@@ -131,7 +134,7 @@ const close = () => {
                 v-model="store3.params.tencentcloud.region"></v-combobox>
             </v-col>
             <v-col cols="4">
-              <v-btn color="primary" style="margin-top: 8px;" @click="handleSelect">应用</v-btn>
+              <v-btn color="primary" style="margin-top: 8px;" @click="handleSelect('腾讯云')">应用</v-btn>
             </v-col>
           </v-row>
         </v-expansion-panel-text>

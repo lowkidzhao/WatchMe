@@ -1,7 +1,9 @@
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { defineStore } from "pinia";
 
 export const useDataStore = defineStore("data", () => {
+	const cloud = ref("未选中");
+
 	const params = reactive({
 		tencentcloud: {
 			credential: {
@@ -21,15 +23,15 @@ export const useDataStore = defineStore("data", () => {
 		Response: {
 			ProductList: [
 				{
-					Namespace: "test/17_01",
-					ProductEnName: "shan_17_01_policy01",
-					ProductName: "shan_17_01_policy01",
+					Namespace: "",
+					ProductEnName: "",
+					ProductName: "",
 				},
 			],
-			RequestId: "addfaffqqn",
-			TotalCount: 1,
+			RequestId: "",
+			TotalCount: 0,
 		},
 	});
 
-	return { params, server };
+	return { params, server, cloud };
 });

@@ -43,7 +43,7 @@ function createWindow() {
 			(details, callback) => {
 				// 定义 CSP 策略，考虑 Vue 项目特性
 				let csp =
-					"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self';";
+					"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https://cloudcache.tencent-cloud.com data:; connect-src 'self'; font-src 'self';";
 				if (process.env.NODE_ENV === "development") {
 					// 将 http://localhost:5173 添加到 font-src 指令的值中
 					csp = csp.replace(
@@ -303,6 +303,16 @@ ipcMain.handle("call-tencentcloud-api", async (event, choice, params) => {
 					logger.error("调用 clientUse 方法时出错:", error);
 					throw error;
 				}
+			case "getMonitorData":
+				try {
+					const result = await tencentcloudApi.getMonitorData(params);
+					logger.info("成功调用 getMonitorData 方法");
+					return result;
+				} catch (error) {
+					logger.error("调用 getMonitorData 方法时出错:", error);
+					throw error;
+				}
+
 			default:
 				logger.error("未找到对应的 API 方法");
 				throw new Error("未找到对应的 API 方法");

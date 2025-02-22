@@ -4,6 +4,21 @@ import { useComputersStore } from '@/stores/mycomputers';
 import { useControllersStore } from '@/stores/controllers';
 import { useSnackdataStore } from '@/stores/snackdata';
 import { RouterLink } from 'vue-router';
+import { useDataStore } from '@/stores/data';
+import { fetchTencentCloudClientUse } from '@/utils/Tencentcloud-Api';
+
+const dataStore = useDataStore();
+
+
+async function getdata() {
+  const message = await fetchTencentCloudClientUse()
+  if (message.status != "获取成功") {
+    store3.error(message)
+  } else {
+    dataStore.server = message.result
+    store3.success(message.status)
+  }
+}
 
 const store = useControllersStore();
 const store2 = useComputersStore();
@@ -69,18 +84,14 @@ const handleButtonClick = async () => {
   <div v-else>
     <v-speed-dial location="top center" transition="slide-y-reverse-transition" v-model="isSpeedDialOpen">
       <template v-slot:activator="{ props: activatorProps }">
-        <v-fab v-bind="activatorProps" size="large" icon="mdi-bank-outline"></v-fab>
+        <v-fab v-bind="activatorProps" size="large" icon="mdi-weather-cloudy"></v-fab>
       </template>
       <!-- 显示监控端信息 -->
       <RouterLink key="1" to="/server">
         <v-btn icon="$info"></v-btn>
       </RouterLink>
-      <!-- 图形化显示 -->
-      <RouterLink key="2" :to="`/server/motion/${55}`">
-        <v-btn icon="mdi-chart-bar"></v-btn>
-      </RouterLink>
       <!-- 重新加载 -->
-      <v-btn key="3" icon="mdi-refresh"></v-btn>
+      <v-btn key="3" icon="mdi-refresh" @click="getdata"></v-btn>
     </v-speed-dial>
   </div>
 </template>

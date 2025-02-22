@@ -130,9 +130,32 @@ const getConfig = () => {
 	}
 };
 
-// 导出 clientUse 函数和 updateConfig 函数
+// 在文件顶部添加 Monitor 客户端
+const MonitorClient = tencentcloud.monitor.v20180724.Client;
+
+// 在模块导出前添加监控方法
+const getMonitorData = async (params) => {
+	try {
+		let config = getClientConfig();
+		config.profile.httpProfile.endpoint = "monitor.tencentcloudapi.com";
+		const client = new MonitorClient(config);
+		return await client.GetMonitorData({
+			...params,
+			// Namespace: "QCE/LIGHT_HOUSE", // 必须参数
+		});
+	} catch (error) {
+		throw new Error(
+			`腾讯云监控接口错误: ${
+				error.message.split("]")[1]?.trim() || error.message
+			}`
+		);
+	}
+};
+
+// 在导出对象中新增 getMonitorData
 module.exports = {
 	clientUse,
 	updateConfig,
 	getConfig,
+	getMonitorData,
 };
