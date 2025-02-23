@@ -267,13 +267,17 @@ fs.access(configFilePath, fs.constants.F_OK, (err) => {
 });
 
 // 监听来自渲染进程的消息
-ipcMain.handle("call-tencentcloud-api", async (event, choice, params) => {
-	// 将 choice 转换为字符串
-	choice = String(choice);
-	logger.info("接收到的 choice:", choice); // 确认 choice 是否正确接收
+ipcMain.handle("call-tencentcloud-api", async (event, ...args) => {
+	// 修正参数解构方式
+	const [choice, params] = args;
+	logger.info(`接收到的参数列表: ${JSON.stringify(args)}`); // 调试用
+
 	if (!choice) {
+		logger.error("方法参数缺失");
 		throw new Error("方法未指定");
 	}
+	logger.info(`接收到的 choice: ${choice}`); // 修正日志输出方式
+
 	try {
 		switch (choice) {
 			case "updataConfig":

@@ -1,6 +1,9 @@
 <script setup>
 import { useDataStore } from '@/stores/data';
 import { useSnackdataStore } from '@/stores/snackdata';
+import { onMounted } from 'vue';
+import { fetchTencentCloudClientUse } from '@/utils/Tencentcloud-Api';
+
 
 const dataStore = useDataStore();
 const store3 = useSnackdataStore();
@@ -14,6 +17,15 @@ const copyToClipboard = async (text, type) => {
     store3.error('复制失败，请手动选择文本');
   }
 };
+onMounted(async () => {
+  const message = await fetchTencentCloudClientUse()
+  if (message.status != "获取成功") {
+    store3.error(message)
+  } else {
+    dataStore.server = message.result
+    store3.success(message.status)
+  }
+})
 </script>
 
 <template>
@@ -37,7 +49,7 @@ const copyToClipboard = async (text, type) => {
             <div class="text-caption mb-2 d-flex justify-space-between">
               <div>
                 <div>ID: {{ instance.InstanceId }}</div>
-                <div>区域: {{ instance.Zone.split('-').slice(0, 2).join('-') }}</div>
+                <div>区域: {{ instance.Zone }}</div>
                 <div>配置: {{ instance.CPU }}核 / {{ instance.Memory }}GB</div>
               </div>
               <div class="d-flex flex-column">
@@ -99,11 +111,15 @@ const copyToClipboard = async (text, type) => {
             </div>
 
             <div class="d-flex align-center">
-              <RouterLink :key="instance.InstanceId" :to="`/server/motion/${instance.InstanceId}`">
+              <RouterLink v-if="instance?.InstanceId" :key="instance.InstanceId"
+                :to="`/server/motion/${instance.InstanceId}`">
                 <v-btn variant="text" color="primary" size="small" prepend-icon="mdi-chart-line">
                   监控详情
                 </v-btn>
               </RouterLink>
+              <v-btn v-else variant="text" color="error" size="small" prepend-icon="mdi-alert-circle" disabled>
+                ID无效
+              </v-btn>
               <!-- 原代码中此处缺少闭合标签，添加闭合标签 -->
             </div>
           </v-card-actions>
@@ -116,12 +132,4 @@ const copyToClipboard = async (text, type) => {
     </v-alert>
   </v-container>
 </template>
-<style scoped>
-.v-tooltip__content.tooltip-top {
-  position: fixed !important;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-}
-</style>
+<style scoped></style>

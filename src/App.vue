@@ -51,10 +51,15 @@ onUnmounted(() => {
   /* 自定义字体名称 */
   src: url('@/assets/fonts/AlibabaPuHuiTi-3-65-Medium.ttf') format('truetype'),
     url('@/assets/fonts/AlibabaPuHuiTi-3-65-Medium.woff') format('truetype'),
-    url('@/assets/fonts/AlibabaPuHuiTi-3-65-Medium.woff2') format('truetype');
+    url('@/assets/fonts/AlibabaPuHuiTi-3-65-Medium.woff2') format('woff2');
 
   font-weight: normal;
   font-style: normal;
+}
+
+.v-card-title,
+.v-card-text {
+  font-family: 'AlibabaPuHuiTi', sans-serif !important;
 }
 
 /* 将字体应用到全局 */

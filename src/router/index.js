@@ -29,7 +29,7 @@ const router = createRouter({
 			component: ServerView,
 		},
 		{
-			path: "/server/motion/:uuid",
+			path: "/server/motion/:InstanceId",
 			name: "serverMotion",
 			component: ServerMotionView,
 		},

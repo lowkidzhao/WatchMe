@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 
 export const useDataStore = defineStore("data", () => {
 	const cloud = ref("未选中");
+	const monitorData = ref();
 
 	const params = reactive({
 		tencentcloud: {
@@ -19,19 +20,11 @@ export const useDataStore = defineStore("data", () => {
 		},
 	});
 	//服务器
-	const server = reactive({
-		Response: {
-			ProductList: [
-				{
-					Namespace: "",
-					ProductEnName: "",
-					ProductName: "",
-				},
-			],
-			RequestId: "",
-			TotalCount: 0,
-		},
-	});
+	const server = reactive();
 
-	return { params, server, cloud };
+	function setInstanceMonitorData(data) {
+		monitorData.value = data;
+	}
+
+	return { params, server, cloud, monitorData, setInstanceMonitorData };
 });

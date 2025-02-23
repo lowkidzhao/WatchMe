@@ -1,5 +1,7 @@
 <script setup>
 import { ref } from 'vue';
+import html2canvas from 'html2canvas';
+import { useRouter } from 'vue-router';
 import { useComputersStore } from '@/stores/mycomputers';
 import { useControllersStore } from '@/stores/controllers';
 import { useSnackdataStore } from '@/stores/snackdata';
@@ -55,6 +57,64 @@ const handleButtonClick = async () => {
   console.log('isSpeedDialOpen:', isSpeedDialOpen.value); // 添加调试信息
   await callMainProcessMethod();
 };
+
+const router = useRouter();
+const generateScreenshot = async () => {
+  try {
+    // 检查是否有可用的 uuid
+    if (store2.computerNow && store2.computerNow.system && store2.computerNow.system.systemInfo) {
+      const uuid = store2.computerNow.system.systemInfo.uuid;
+      // 使用正确的路由名称和传递 uuid 参数
+      await router.push({ name: 'info', params: { uuid } });
+
+      // 等待页面渲染完成
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // 获取 InfoView.vue 页面的 DOM 元素
+      const infoViewElement = document.querySelector('.main-container');
+      if (infoViewElement) {
+        // 使用 html2canvas 生成截图
+        const canvas = await html2canvas(infoViewElement);
+        const dataURL = canvas.toDataURL('image/png');
+
+        // 创建一个下载链接
+        const link = document.createElement('a');
+        link.href = dataURL;
+        link.download = 'info_view_screenshot.png';
+
+        // 触发下载
+        link.click();
+
+        // 显示成功提示
+        const store3 = useSnackdataStore();
+        store3.snackbar = true;
+        store3.text = '截图已生成，请选择保存路径';
+        store3.color1 = 'success';
+      } else {
+        console.error('未找到 InfoView 元素');
+        // 显示失败提示
+        const store3 = useSnackdataStore();
+        store3.snackbar = true;
+        store3.text = '未找到 InfoView 元素，无法生成截图';
+        store3.color1 = 'error';
+      }
+    } else {
+      console.error('未获取到有效的 uuid');
+      // 显示失败提示
+      const store3 = useSnackdataStore();
+      store3.snackbar = true;
+      store3.text = '未获取到有效的 uuid，无法生成截图';
+      store3.color1 = 'error';
+    }
+  } catch (error) {
+    console.error('生成截图时出错:', error);
+    // 显示失败提示
+    const store3 = useSnackdataStore();
+    store3.snackbar = true;
+    store3.text = '生成截图时出错，请稍后重试';
+    store3.color1 = 'error';
+  }
+};
 </script>
 
 <template>
@@ -75,8 +135,8 @@ const handleButtonClick = async () => {
         key="2" :to="`/motion/${store2.computerNow.system.systemInfo.uuid}`">
         <v-btn icon="mdi-chart-bar"></v-btn>
       </RouterLink>
-      <!-- 分享（待制作） -->
-      <v-btn key="3" icon="mdi-link-box-variant"></v-btn>
+      <!-- 分享（生成截图） -->
+      <v-btn key="3" icon="mdi-link-box-variant" @click="generateScreenshot"></v-btn>
       <!-- 重新加载 -->
       <v-btn key="4" icon="mdi-refresh" @click="handleButtonClick" :loading="store2.showWaiting"></v-btn>
     </v-speed-dial>

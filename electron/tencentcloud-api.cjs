@@ -3,6 +3,8 @@ const tencentcloud = require("tencentcloud-sdk-nodejs");
 const fs = require("fs");
 const path = require("path");
 const { app } = require("electron");
+const { log } = require("console");
+const { default: logger } = require("./logger.cjs");
 
 // 定义 Lighthouse 客户端
 const LighthouseClient = tencentcloud.lighthouse.v20200324.Client;
@@ -139,20 +141,22 @@ const getMonitorData = async (params) => {
 		let config = getClientConfig();
 		config.profile.httpProfile.endpoint = "monitor.tencentcloudapi.com";
 		const client = new MonitorClient(config);
-		return await client.GetMonitorData({
-			...params,
-			// Namespace: "QCE/LIGHT_HOUSE", // 必须参数
-		});
+		const result = await client.GetMonitorData(params);
+		return result;
 	} catch (error) {
+		logger.error(
+			`腾讯云监控接口错误: ${
+				error.message.match(/\[.*?\]\s*(?<detail>.+)/)?.groups?.detail
+			}`
+		);
 		throw new Error(
 			`腾讯云监控接口错误: ${
-				error.message.split("]")[1]?.trim() || error.message
+				error.message.match(/\[.*?\]\s*(?<detail>.+)/)?.groups?.detail
 			}`
 		);
 	}
 };
 
-// 在导出对象中新增 getMonitorData
 module.exports = {
 	clientUse,
 	updateConfig,

@@ -29,43 +29,65 @@ async function fetchTencentCloudClientUse() {
 }
 //腾讯云监控数据
 async function fetchInstanceMonitorData(
-	instanceId,
+	uuid,
 	metricName,
 	period = 300,
-	Namespace
+	namespace = "QCE/LIGHTHOUSE"
 ) {
 	try {
+		// 添加参数验证
+		if (!uuid || typeof uuid !== "string") {
+			throw new Error("无效的实例ID");
+		}
 		const now = Math.floor(Date.now() / 1000);
-		let params = {
-			Namespace: Namespace,
-			InstanceId: instanceId,
+		const params = {
+			Namespace: namespace,
 			MetricName: metricName,
-			StartTime: now - 3600 * 3, // 默认查询3小时数据
-			EndTime: now,
+			Instances: [
+				{
+					Dimensions: [
+						{
+							Name: "InstanceId",
+							Value: uuid,
+						},
+					],
+				},
+			],
 			Period: period,
+			// 新增时间范围参数（查询最近1小时数据）
+			StartTime:
+				new Date((now - 3600) * 1000).toISOString().split(".")[0] + "Z",
+			EndTime: new Date(now * 1000).toISOString().split(".")[0] + "Z",
 		};
 		const result = await window.electronAPI.callTencentCloudAPI(
 			"getMonitorData",
 			params
 		);
-
+		// 重构数据处理逻辑
+		const validDataPoints = result.DataPoints.flatMap((dp) => {
+			if (!dp.Timestamps || !dp.Values) return [];
+			return dp.Timestamps.map((timestamp, index) => ({
+				Timestamp: timestamp,
+				Value: dp.Values[index] ?? null,
+			}));
+		}).filter(
+			(dp) => dp.Value !== null && !isNaN(dp.Value) && dp.Timestamp > 0
+		);
 		return {
 			MetricName: metricName,
-			DataPoints: result.DataPoints.filter((dp) => dp.Value !== null)
+			DataPoints: validDataPoints
 				.map((dp) => ({
-					Timestamp: dp.Timestamp * 1000, // 转换为毫秒时间戳
-					Value: Number(dp.Value.toFixed(2)),
+					Timestamp: dp.Timestamp * 1000,
+					Value: Number(parseFloat(dp.Value).toFixed(2)),
 				}))
-				.sort((a, b) => a.Timestamp - b.Timestamp), // 按时间排序
+				.sort((a, b) => a.Timestamp - b.Timestamp),
 		};
 	} catch (error) {
-		// 错误处理与其它接口保持一致
-		if (error.message.includes("TencentCloudSDKException")) {
-			throw new Error(
-				`腾讯云接口错误: ${error.message.split("]")[1]?.trim() || "未知错误"}`
-			);
-		}
-		throw new Error(`监控数据获取失败: ${error.message}`);
+		// 优化错误信息
+		const errorDetail = error.message.includes("toFixed")
+			? "监控数据格式异常"
+			: error.message.split("]")[1]?.trim();
+		throw new Error(`监控数据获取失败: ${errorDetail || error.message}`);
 	}
 }
 //获取腾讯云配置
